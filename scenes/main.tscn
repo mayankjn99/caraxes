@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_level"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="2_player"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="3_hud"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(24, 38)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_instructions"]
+bg_color = Color(0.07, 0.15, 0.21, 0.96)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_completion"]
+bg_color = Color(0.07, 0.15, 0.21, 0.96)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+
+[node name="Main" type="Node2D"]
+
+[node name="Level" type="Node2D" parent="."]
+script = ExtResource("1_level")
+
+[node name="Player" type="CharacterBody2D" parent="Level"]
+position = Vector2(80, 430)
+script = ExtResource("2_player")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Level/Player"]
+shape = SubResource("RectangleShape2D_player")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("3_hud")
+
+[node name="Instructions" type="Label" parent="HUD"]
+offset_left = 20.0
+offset_top = 16.0
+offset_right = 620.0
+offset_bottom = 70.0
+text = "Move: A/D or arrows     Jump: Space, W or Up"
+theme_override_colors/font_color = Color(0.95, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_instructions")
+
+[node name="Completion" type="Label" parent="HUD"]
+visible = false
+offset_left = 310.0
+offset_top = 210.0
+offset_right = 650.0
+offset_bottom = 270.0
+text = "Passage complete!"
+theme_override_colors/font_color = Color(0.95, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_completion")
+horizontal_alignment = 1

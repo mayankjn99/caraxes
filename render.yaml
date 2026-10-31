@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: frozen-passage
+    runtime: static
+    buildCommand: bash scripts/build_web.sh
+    staticPublishPath: build/web
+    autoDeployTrigger: commit
