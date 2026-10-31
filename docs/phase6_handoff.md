@@ -20,16 +20,13 @@ Phase 5 is complete. The HUD instructions use 24 px type on a dark backing; comp
 
 Godot may still print host macOS certificate, `user://` log, MCP registry/port, and editor-settings write warnings. See `docs/qa_report.md`; tested commands exited successfully.
 
-## Phase 6 scope and constraints
+## Phase 6 current state
 
-Prepare the GitHub repository and Render static-site deployment for the existing Godot Web export. Verify a clean-checkout build, published files, browser startup, and a full traversal playthrough on the deployed URL. Update `docs/deployment.md` and the QA scorecard with evidence and limitations.
-
-- Do not add gameplay systems; the confirmed loop is complete.
-- Keep runtime assets local and offline.
-- The workspace has no Git commit or GitHub remote yet. Confirm repository/remote expectations in the fresh Phase 6 session before creating or publishing anything.
-- The connected GitHub search did not identify a Frozen Passage repository; this local checkout still has no remote. The intended GitHub owner, repository name, and visibility remain to be confirmed before creating or publishing a repository.
-- Render currently has no selected workspace. Workspace discovery returned `My Workspace`; the Render integration requires the user to confirm which workspace to use before any resource operation.
-- No deployment or remote setup was started in this Phase 5 session.
+- Do not add gameplay systems; the confirmed traversal loop is complete. Keep runtime assets local and offline.
+- The user selected `mayankjn99/caraxes`. Local `main` includes the project commit and a merge commit preserving GitHub's existing initial commit, README, and MIT license. Nothing has been pushed; the user handles the push. Next command: `git push origin main`.
+- `render.yaml` and `scripts/build_web.sh` passed local checks. A disposable clean clone of local `main` passed GUT (11/11 tests, 28/28 assertions) after Godot import and generated the required Web files.
+- Render workspace: **My Workspace** (`tea-d80bkebrjlhs73a68jgg`). It has no Frozen Passage service; existing services are unrelated. Create the Blueprint service only after the project commit is pushed.
+- Still required: Render Linux build and publish, deployed file checks, deployed startup, and full keyboard traversal at 960×540 and 640×360. Browser operations are user-performed; do not use Chrome or browser automation.
 - Current toolchain: Godot 4.7.2 stable, GUT 9.7.1, Godot MCP Toolkit 1.1.2.
 
 ## Relevant files

@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-Phase 6 — release and deployment. Deployment preparation is complete locally: the Render static-site Blueprint parses, the pinned Godot build script exports the site with the installed 4.7.2 toolchain, and the expected published files exist. The Phase 5 gate was independently rerun in this session: GUT passed 11/11 tests and 28/28 assertions, headless launch exited 0, Web export exited 0, and the user-reported browser check at 960×540 and 640×360 remains recorded. A clean checkout, Render build, and deployed browser playthrough are still pending because no GitHub remote has been selected and no Frozen Passage Render service exists. Browser operations are performed by the user; no new browser check was attempted. Prior phase history and the Phase 4 presentation/asset notes follow.
+Phase 6 — release and deployment. Local preparation is complete: the Render static-site Blueprint parses, and the pinned Godot build script exports the site with installed Godot 4.7.2. A disposable clean clone of local `main` passed GUT (11/11 tests, 28/28 assertions) after Godot import and produced the expected Web files. The selected GitHub repository is `mayankjn99/caraxes`; local history preserves its initial commit and license, but has not been pushed. Render build/publish and deployed browser playthrough remain pending. Browser operations are performed by the user; no browser was opened or controlled in this session. Prior phase history and Phase 4 presentation/asset notes follow.
 
 ## TDD record
 
@@ -80,10 +80,11 @@ Phase 4 meets its presentation and asset-provenance gate with local code-drawn v
 | Phase 5 Web export gate | `GODOT_MCP_RUNTIME=0 godot --headless --path . --export-release Web build/phase6-verification/index.html` | Passed — exit code 0; generated `index.html`, JavaScript, WebAssembly, PCK, and audio worklet files. Existing host/editor/MCP write warnings were printed. |
 | Render configuration | Ruby Psych parsed `render.yaml`; a focused check confirmed `type: web`, `runtime: static`, build command, and `build/web` publish path. `bash -n scripts/build_web.sh` | Passed — YAML parses and configured fields match the intended Godot static export. |
 | Documented build script | `GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh` | Passed locally with installed Godot `4.7.2.stable.official.ed1daf0bf`; editor import and Web export completed, and script checks verified non-empty `index.html`, `index.js`, `index.wasm`, and `index.pck` under `build/web`. The script's Linux x86_64 binary/template download branch was not run in this macOS session. |
-| GitHub repository state | Connected GitHub repository search, repository metadata, and default-branch root contents; local `git status --short --branch` and `git remote -v` | No project remote or local commit. `mayankjn99/caraxes` exists and is writable, but currently contains only `README.md` and `LICENSE`; it was not linked, overwritten, or pushed. No repository was created. |
+| GitHub repository state | GitHub commit search and file fetch; local `git log --oneline --graph` and `git remote -v` | Selected repo is `mayankjn99/caraxes`; remote remains at initial commit `533581d`. Local `main` has project commit `77f6543` and merge commit `beb6a25`, preserving the remote initial commit and license. No push was made; the user handles it. |
+| Clean local clone | `git clone --no-hardlinks` from local checkout into disposable `/private/tmp`; Godot import; GUT; `bash scripts/build_web.sh` | Passed after import — GUT 11/11 tests, 28/28 assertions; Web build generated non-empty `index.html`, `index.js`, `index.wasm`, and `index.pck`. This proves the local committed tree builds from a clean clone on macOS. It does not verify GitHub checkout or Render's Linux path. |
 | Render workspace state | Render MCP workspace list and services in **My Workspace** (`tea-d80bkebrjlhs73a68jgg`) | No Frozen Passage static site exists. Existing listed services are unrelated. No Render resource or deployment was created. |
 | Render deployment guidance | Current [Static Sites](https://render.com/docs/static-sites) and [Blueprint YAML Reference](https://render.com/docs/blueprint-spec) opened and read | Supports a static site with `type: web`, `runtime: static`, build command, and required publish path. Render-specific Linux build and deployment remain unverified until a linked pushed repository/service is available. |
-| Clean checkout and deployed playthrough | GitHub/Render plus user browser operation | Pending — do not treat P6-02 or P6-03 as passed. See `docs/deployment.md` for the required repository selection, Render Blueprint setup, and deployment checks. |
+| Pushed checkout, Render build, and deployed playthrough | GitHub/Render plus user browser operation | Pending — local branch is prepared but not pushed; Render has no Frozen Passage service. Do not mark P6-02 or P6-03 complete. See `docs/deployment.md` for remaining steps. |
 
 ## QA scorecard
 
@@ -96,8 +97,8 @@ Current self-assessment after Phase 6 local preparation, out of each category's 
 | Code quality | 20 | 17 | Player, Level, and signal-driven HUD have separate responsibilities and focused tests. |
 | Visuals and audio | 10 | 7 | Coherent code-drawn winter palette and player/goal illustrations; no audio or third-party art. |
 | UI | 10 | 8 | Existing HUD labels have readable text size and measured high contrast; user confirmed the route and HUD work at both supported browser sizes. |
-| Deployment | 10 | 6 | Local Web export, user-confirmed browser sizes, and static-site configuration pass; clean checkout and Render deployment remain unverified. |
-| **Total** | **100** | **81** | Not a substitute for the mandatory gameplay/deployment gates. |
+| Deployment | 10 | 7 | Local and clean-clone Web exports, user-confirmed browser sizes, and static-site configuration pass; pushed GitHub checkout and Render deployment remain unverified. |
+| **Total** | **100** | **82** | Not a substitute for the mandatory gameplay/deployment gates. |
 
 Mandatory gameplay checks pass. Deployment remains an incomplete mandatory Phase 6 gate until a pushed repository and Render service are available and verified.
 
@@ -108,5 +109,5 @@ Mandatory gameplay checks pass. Deployment remains an incomplete mandatory Phase
 - Phase 4 Web export was refreshed, but in-session browser verification of that art presentation was blocked by localhost binding. Phase 5 browser-size usability was later confirmed by the user; previous Phase 2 traversal evidence remains recorded above.
 - The user confirmed the refreshed export at 640×360 and 960×540 in Chrome. No browser screenshots are included; the Godot MCP captures are the only visual artifacts in this report.
 - The export is verified in headless Chrome with SwiftShader; interactive browser testing and additional browser coverage remain later usability work.
-- The existing connected GitHub repository `mayankjn99/caraxes` contains only a README and LICENSE, while this local project has no remote or commit. The intended target repository must be selected before push; no remote was added.
+- The remote `mayankjn99/caraxes` still contains only the original README and LICENSE until the user pushes local `main`; local history preserves both.
 - No Frozen Passage Render service exists in **My Workspace**. Render build, deployed file serving, deployed browser startup, and full playthrough remain pending. The Linux download path in the build script is not verified yet.
