@@ -23,10 +23,10 @@ Godot may still print host macOS certificate, `user://` log, MCP registry/port, 
 ## Phase 6 current state
 
 - Do not add gameplay systems; the confirmed traversal loop is complete. Keep runtime assets local and offline.
-- The user selected `mayankjn99/caraxes`. Local `main` includes the project commit and a merge commit preserving GitHub's existing initial commit, README, and MIT license. Nothing has been pushed; the user handles the push. Next command: `git push origin main`.
-- `render.yaml` and `scripts/build_web.sh` passed local checks. A disposable clean clone of local `main` passed GUT (11/11 tests, 28/28 assertions) after Godot import and generated the required Web files.
-- Render workspace: **My Workspace** (`tea-d80bkebrjlhs73a68jgg`). It has no Frozen Passage service; existing services are unrelated. Create the Blueprint service only after the project commit is pushed.
-- Still required: Render Linux build and publish, deployed file checks, deployed startup, and full keyboard traversal at 960×540 and 640×360. Browser operations are user-performed; do not use Chrome or browser automation.
+- The user selected `mayankjn99/caraxes`; local `main` is synchronized to pushed commit `0515466` and preserves the original README and MIT license.
+- Render static site `frozen-passage` exists in **My Workspace** (`tea-d80bkebrjlhs73a68jgg`), at `https://frozen-passage.onrender.com`. First deploy failed because the export-template download URL in the build script returned 404.
+- TDD fix is local: a URL regression script failed against the old TuxFamily URL, then passed after changing to Godot's official download endpoint. HTTP HEAD to that endpoint returned 200; the local build passed. Fix is not yet pushed.
+- Still required: user pushes the fix, Render auto deploys successfully, published files are confirmed, and user verifies startup and completes the keyboard traversal at 960×540 and 640×360. Browser operations are user-performed; do not use Chrome or browser automation.
 - Current toolchain: Godot 4.7.2 stable, GUT 9.7.1, Godot MCP Toolkit 1.1.2.
 
 ## Relevant files

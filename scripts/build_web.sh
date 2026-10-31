@@ -24,7 +24,7 @@ else
 		"https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip" \
 		--output "$GODOT_ARCHIVE"
 	curl --fail --location --silent --show-error \
-		"https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz" \
+		"https://downloads.godotengine.org/?flavor=stable&platform=templates&slug=export_templates.tpz&version=${GODOT_VERSION}" \
 		--output "$TEMPLATES_ARCHIVE"
 	unzip -q "$GODOT_ARCHIVE" -d "$TOOLS_DIR"
 	chmod +x "$GODOT_CMD"
