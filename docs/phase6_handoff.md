@@ -1,8 +1,8 @@
-# Frozen Passage — Phase 6 Handoff
+# Frozen Passage — Phase 6 Status and Handoff
 
 ## Goal
 
-Begin Phase 6 — release and deployment — in a fresh session. Read `docs/implementationPlan.md`, `docs/acceptance_criteria.md`, `docs/qa_report.md`, `docs/enginerringPlan.md`, `docs/assetsGuide.md`, `docs/game_design.md`, `docs/architecture.md`, `docs/asset_manifest.md`, and this handoff. Inspect the current working tree and verify the Phase 5 gate before changing files.
+Phase 6 — release and deployment — is in progress. The game is deployed, but the user still needs to verify browser startup, supported viewport sizes, and a complete traversal. Read `docs/implementationPlan.md`, `docs/acceptance_criteria.md`, `docs/qa_report.md`, `docs/deployment.md`, `docs/enginerringPlan.md`, `docs/assetsGuide.md`, `docs/game_design.md`, `docs/architecture.md`, `docs/asset_manifest.md`, and this handoff. Do not mark Phase 6 complete until P6-03 passes.
 
 ## Completed phase
 
@@ -16,7 +16,7 @@ Phase 5 is complete. The HUD instructions use 24 px type on a dark backing; comp
 - `GODOT_MCP_RUNTIME=0 godot --headless --path . --quit-after 2` — exit 0.
 - `GODOT_MCP_RUNTIME=0 godot --headless --path . --export-release Web build/web/index.html` — exit 0.
 - Godot MCP launched the main scene, captured the current HUD and completion states at 958×538, and reported no runtime errors. Screenshots are recorded above.
-- The user manually confirmed the exported browser build at 960×540 and 640×360. This is user-reported verification; no browser screenshots are stored.
+- The user manually confirmed an earlier exported browser build at 960×540 and 640×360. This is user-reported evidence for the Phase 5 layout, not a check of the current deployed URL; no browser screenshots are stored.
 
 Godot may still print host macOS certificate, `user://` log, MCP registry/port, and editor-settings write warnings. See `docs/qa_report.md`; tested commands exited successfully.
 
@@ -39,4 +39,4 @@ Godot may still print host macOS certificate, `user://` log, MCP registry/port, 
 - `test/unit/test_viewport_scaling.gd`
 - `docs/acceptance_criteria.md`
 - `docs/qa_report.md`
-- `docs/deployment.md` (create during Phase 6)
+- `docs/deployment.md`
