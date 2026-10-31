@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-Phase 6 — release and deployment. The pushed GitHub commit `0515466` passed a clean local clone build on macOS. Render site `frozen-passage` was created from `main`, but its first build failed with HTTP 404 while downloading export templates. A focused regression check failed against the old TuxFamily URL, then passed after switching to Godot's official download endpoint. That endpoint returns HTTP 200 and the updated local build script passes. The fix is not yet pushed, so Render's Linux build/publish and deployed browser playthrough remain unverified. Browser operations are performed by the user; no browser was opened or controlled in this session. Prior phase history and Phase 4 presentation/asset notes follow.
+Phase 6 — release and deployment. GitHub `main` now includes commit `22f10ba`, which fixes the Linux export-template URL. The first Render build failed on the old TuxFamily URL; the fix passed a red/green URL regression check, the local GUT suite (11/11 tests, 28/28 assertions), smoke launch, and Web export. Render's second deployment built the Linux Web export and is live. HTTPS HEAD checks returned 200 for the root, HTML, JS, WASM, and PCK assets; WASM uses `application/wasm`. Browser playthrough and viewport verification remain for the user. No browser was opened or controlled in this session. Prior phase history and Phase 4 presentation/asset notes follow.
 
 ## TDD record
 
@@ -80,17 +80,19 @@ Phase 4 meets its presentation and asset-provenance gate with local code-drawn v
 | Main-scene smoke launch | `GODOT_MCP_RUNTIME=0 godot --headless --path . --quit-after 2` | Passed — exit code 0. The host certificate and `user://` log write errors were printed. |
 | Phase 5 Web export gate | `GODOT_MCP_RUNTIME=0 godot --headless --path . --export-release Web build/phase6-verification/index.html` | Passed — exit code 0; generated `index.html`, JavaScript, WebAssembly, PCK, and audio worklet files. Existing host/editor/MCP write warnings were printed. |
 | Render configuration | Ruby Psych parsed `render.yaml`; a focused check confirmed `type: web`, `runtime: static`, build command, and `build/web` publish path. `bash -n scripts/build_web.sh` | Passed — YAML parses and configured fields match the intended Godot static export. |
-| Documented build script | `GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh` | Passed locally with installed Godot `4.7.2.stable.official.ed1daf0bf`; editor import and Web export completed, and script checks verified non-empty `index.html`, `index.js`, `index.wasm`, and `index.pck`. Linux template URL is corrected locally; Render must verify the Linux branch after the fix is pushed. |
-| GitHub repository state | GitHub commit search and file fetch; local `git log --oneline --graph` and `git rev-parse HEAD origin/main` | `mayankjn99/caraxes` `main` points to `0515466`, matching local `HEAD`; remote includes the project files and `render.yaml`. The subsequent template URL fix is local and unpushed. |
+| Documented build script | `GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh`; Render build log and deploy record | Passed locally with installed Godot `4.7.2.stable.official.ed1daf0bf`; script produced non-empty `index.html`, `index.js`, `index.wasm`, and `index.pck`. Render's Linux x86_64 path also passed after the template URL fix. |
+| GitHub repository state | GitHub commit search and file fetch; local `git log --oneline --graph` and `git rev-parse HEAD origin/main` | `mayankjn99/caraxes` `main` points to `22f10ba`, matching local `HEAD`; remote includes the fix and regression script. |
 | Clean local clone | `git clone --no-hardlinks` from local checkout into disposable `/private/tmp`; Godot import; GUT; `bash scripts/build_web.sh` | Passed after import — GUT 11/11 tests, 28/28 assertions; Web build generated non-empty `index.html`, `index.js`, `index.wasm`, and `index.pck`. This proves the local committed tree builds from a clean clone on macOS. It does not verify GitHub checkout or Render's Linux path. |
 | Render site and first deploy | Render MCP service details, deploy record, build logs, and events in **My Workspace** | Static site `frozen-passage` (`srv-dbj7lugae00c73deh5cg`) is linked to `mayankjn99/caraxes` branch `main`, building `bash scripts/build_web.sh` and publishing `build/web`. First deploy `dep-dbj7luoae00c73deh6d0` used commit `0515466` and failed during build with curl HTTP 404. Logs and events confirm failure; site URL is `https://frozen-passage.onrender.com`. |
-| Godot template URL fix | `bash test/scripts/test_build_web_template_download_url.sh`; `curl --head` against old and official URLs; local build script | Regression script failed before fix and passes after. Old TuxFamily URL returned HTTP 404; official Godot endpoint redirected and returned HTTP 200. Local build script passed. This does not yet prove Render's Linux build. |
-| Render deployment guidance | Current [Static Sites](https://render.com/docs/static-sites) and [Blueprint YAML Reference](https://render.com/docs/blueprint-spec) opened and read | Supports a static site with `type: web`, `runtime: static`, build command, and required publish path. Render-specific Linux build and deployment remain unverified until a linked pushed repository/service is available. |
-| Fixed Render deploy and browser traversal | Push corrected build script, then Render deploy logs/status, served files, and user browser operation | Pending — local fix is not pushed, so the existing failed service has not rebuilt. Do not mark P6-01 through P6-03 complete. See `docs/deployment.md` for remaining steps. |
+| Godot template URL fix | `bash test/scripts/test_build_web_template_download_url.sh`; `curl --head` against old and official URLs; local build script | Regression script failed before fix and passes after. Old TuxFamily URL returned HTTP 404; official Godot endpoint redirected and returned HTTP 200. Local build passed, and the successful Render Linux build confirms the fix. |
+| Render deployment after fix | Render deploy status and build logs | Deploy `dep-dbj7qj49v7es739bjaag` built commit `22f10ba` and reached `live`; logs end with `Uploading build...` and `Your site is live`. This verifies the corrected Linux download, import, and export steps. |
+| Deployed asset serving | HTTPS HEAD requests to `/`, `/index.html`, `/index.js`, `/index.wasm`, `/index.pck` on `https://frozen-passage.onrender.com` | All five returned HTTP 200. Content types were HTML, JavaScript, `application/wasm`, and binary PCK as expected. No browser was opened; game startup and traversal remain unverified. |
+| Render deployment guidance | Current [Static Sites](https://render.com/docs/static-sites) and [Blueprint YAML Reference](https://render.com/docs/blueprint-spec) opened and read | Supports the configured static site, build command, and publish path. Static site deployed from the pushed public Git URL; manual deploy was required after the push. |
+| Deployed browser traversal | User opens the live URL at 960×540 and 640×360 and completes the route | Pending — the deployment and required assets are live, but the user still needs to verify browser startup, viewport layout, and keyboard traversal. P6-03 remains incomplete. See `docs/deployment.md`. |
 
 ## QA scorecard
 
-Current self-assessment after Phase 6 local preparation, out of each category's listed weight:
+Current self-assessment after Phase 6 deployment preparation, out of each category's listed weight:
 
 | Category | Weight | Score | Notes |
 |---|---:|---:|---|
@@ -99,10 +101,10 @@ Current self-assessment after Phase 6 local preparation, out of each category's 
 | Code quality | 20 | 17 | Player, Level, and signal-driven HUD have separate responsibilities and focused tests. |
 | Visuals and audio | 10 | 7 | Coherent code-drawn winter palette and player/goal illustrations; no audio or third-party art. |
 | UI | 10 | 8 | Existing HUD labels have readable text size and measured high contrast; user confirmed the route and HUD work at both supported browser sizes. |
-| Deployment | 10 | 7 | Local and clean-clone Web exports, user-confirmed browser sizes, and static-site configuration pass; pushed GitHub checkout and Render deployment remain unverified. |
-| **Total** | **100** | **82** | Not a substitute for the mandatory gameplay/deployment gates. |
+| Deployment | 10 | 8 | Local and clean-clone exports, a successful Render Linux build, published assets, and earlier user-confirmed browser sizes pass; deployed browser startup and traversal remain unverified. |
+| **Total** | **100** | **83** | Not a substitute for the mandatory gameplay/deployment gates. |
 
-Mandatory gameplay checks pass. Deployment remains an incomplete mandatory Phase 6 gate until a pushed repository and Render service are available and verified.
+Mandatory gameplay checks pass. Deployment remains incomplete only for P6-03 until the user verifies browser startup, the supported viewport sizes, and a complete traversal on the deployed URL.
 
 ## Open issues and environment limitations
 
