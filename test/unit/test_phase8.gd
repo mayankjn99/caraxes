@@ -63,6 +63,37 @@ func test_passage_one_exit_transitions_without_resetting_the_run() -> void:
 	assert_false(game.get_node("HUD/Completion").visible, "An intermediate passage should not show final run results.")
 
 
+func test_stale_passage_one_exit_cannot_finish_passage_two() -> void:
+	var game: Node = add_child_autofree(load("res://scenes/main.tscn").instantiate())
+	var level: Node = game.get_node("Level")
+	var player: CharacterBody2D = game.get_node("Level/Player")
+	level.set("personal_best", 0.0)
+	var passage_one_exit: Area2D = level.get("course_root").get_node("Exit")
+
+	passage_one_exit.body_entered.emit(player)
+	level.call("complete_level")
+	assert_eq(level.get("current_passage"), 2, "The first exit should transition into Passage 2.")
+	await get_tree().process_frame
+
+	assert_false(level.get("completed"), "A stale Passage 1 exit event must not complete the run in Passage 2.")
+	assert_false(game.get_node("HUD/Completion").visible,
+		"Passage 2 should not display final results before the player reaches its exit.")
+
+
+func test_entering_passage_one_exit_leaves_passage_two_playable() -> void:
+	var game: Node = add_child_autofree(load("res://scenes/main.tscn").instantiate())
+	var level: Node = game.get_node("Level")
+	var player: CharacterBody2D = game.get_node("Level/Player")
+	player.global_position = Vector2(900.0, 405.0)
+	await wait_physics_frames(3)
+
+	assert_eq(level.get("current_passage"), 2, "Crossing Passage 1's actual exit should load Passage 2.")
+	assert_false(level.get("completed"), "Entering Passage 2 should not complete the run.")
+	assert_eq(player.global_position, Vector2(60.0, 430.0), "Passage 2 should leave the player at its own spawn.")
+	assert_false(game.get_node("HUD/Completion").visible,
+		"Passage 2 should remain playable without the final results overlay.")
+
+
 func test_passage_two_uses_moving_platforms_and_finishes_the_run() -> void:
 	var game: Node = add_child_autofree(load("res://scenes/main.tscn").instantiate())
 	var level: Node = game.get_node("Level")

@@ -13,7 +13,7 @@ Phase 11 integrated release checks are complete for the local Web build. AudioMa
 ## Implemented scene/component responsibilities
 
 - `Main` (`scenes/main.tscn`): owns the Level and HUD instances.
-- `Level` (`scripts/level.gd`): builds the active passage, detects falls, transitions from Passage 1 to Passage 2, places the one-time dash unlock marker, completes the full run, owns run clock/best-time state, and emits lifecycle/passage signals. Exit-triggered course rebuilds are deferred until the physics query completes.
+- `Level` (`scripts/level.gd`): builds the active passage, detects falls, transitions from Passage 1 to Passage 2, places the one-time dash unlock marker, completes the full run, owns run clock/best-time state, and emits lifecycle/passage signals. Exit-triggered course rebuilds are deferred until the physics query completes; exit callbacks carry a course-generation token so queued events from a replaced course cannot complete the new one.
 - `MovingPlatform` (`scripts/moving_platform.gd`): moves an `AnimatableBody2D` between configured endpoints at a fixed speed and travel duration, then repeats.
 - `Player` (`scripts/player.gd`): owns left/right input, grounded jump, gravity, collision movement, spawn reset, a short horizontal platform-momentum carry on takeoff, and the unlocked dash burst/cooldown.
 - `HUD` (`scripts/hud.gd`): listens for level signals and displays the active passage, run clock, dash unlock/cooldown state, and final results.
@@ -25,7 +25,7 @@ The winter level presentation is drawn in local GDScript using layered mountain 
 
 - GUT tests cover both passages, deterministic platform cycles, platform carry/jump-off, fall recovery, timer continuity, dash unlock/movement/collision/recharge, course progression, and final completion.
 - Phase 10 lifecycle/configuration and packaged-stream GUT tests pass. The actual OGG resource is included in the Web PCK and the AudioStreamPlayer enters its playing state on run start. Subjective listening was waived by the user; the user will review the game link.
-- Phase 11 integration GUT verifies a complete two-passage state flow and restart across timer, dash, HUD/results, and audio. This is deterministic component integration coverage, not an interactive traversal. Current export/browser review and deployment remain user-owned.
+- Phase 11 integration GUT verifies a complete two-passage state flow and restart across timer, dash, HUD/results, and audio. This is deterministic component integration coverage, not an interactive traversal. Commit `82370a7` is live on Render; browser playthrough and listening review remain user-owned under the user's waiver of agent interactive testing.
 
 ## Engine and test toolchain
 

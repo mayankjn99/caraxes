@@ -2,7 +2,7 @@
 
 ## Web deployment and game verification
 
-**Status:** Accepted; project and local toolchain scaffolded; live MCP/playtest verification pending.
+**Status:** Accepted; project deployed on Render at https://frozen-passage.onrender.com; live MCP/playtest verification remains pending under the user's waiver of agent interactive testing.
 
 ### Decision
 
@@ -41,7 +41,7 @@ The hosted MCP endpoint `https://api.spritefetch.dev/mcp` is registered as `spri
 
 ## Speedrun expansion
 
-**Status:** Phase 11 integrated local Web release checks completed (2026-11-01); interactive/browser and listening review waived by user, deployment remains user-owned.
+**Status:** Phase 11 integration and local Web release checks completed (2026-11-01); commit `82370a795e4f8d619fc569f696659a9ffc32c032` is live on Render. A user-reported Passage 2 stuck-state fix is now covered by red/green tests in the local, unpushed candidate; see `docs/qa_report.md`. Interactive/browser and listening review were waived for the agent and remain for user review.
 
 ### Decision
 

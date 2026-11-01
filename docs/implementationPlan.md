@@ -144,7 +144,7 @@ Select human-composed music under a license that permits the intended distributi
 
 ### Phase 11 — Integrated speedrun release
 
-**Status:** Automated local release gate complete (2026-11-01). A cross-system GUT regression covers Passage 1 start and music, fall persistence, Passage 2 transition/movers/HUD, final result and personal best, completion audio stop, then a full restart and fresh run. Full GUT passed 33/33 tests and 197/197 assertions; editor import, headless smoke, and Web export passed. PCK inspection found the local OGG. Agent browser/gameplay and listening review were waived. No push or deployment occurred. SR-10 automated evidence is recorded; browser traversal at supported viewports and deployed behavior remain pending user review.
+**Status:** Phase implementation and automated local release gate complete (2026-11-01). A cross-system GUT regression covers Passage 1 start and music, fall persistence, Passage 2 transition/movers/HUD, final result and personal best, completion audio stop, then a full restart and fresh run. Full GUT passed 33/33 tests and 197/197 assertions; editor import, headless smoke, and Web export passed. PCK inspection found the local OGG. The user waived agent browser/gameplay and listening review. The user pushed commit `82370a7`; Render deploy `dep-dbjfkou7bikc73fak0ng` reached live. SR-10 automated and deployment evidence is recorded; browser traversal at supported viewports and listening feedback remain for user review.
 
 Integrate the clock, Passage 1, Passage 2, dash progression, and music. Tune timing and feedback without adding unrequested services.
 
@@ -152,9 +152,9 @@ Integrate the clock, Passage 1, Passage 2, dash progression, and music. Tune tim
 
 1. Full-run regression: test transitions, timer continuity, fall recovery, final completion, and personal-best updates end to end.
 2. Usability/polish: test control instructions, unlock cue, moving-platform readability, finish results, and restart at supported aspect ratios.
-3. Web/release readiness: run full GUT, headless smoke, and Web export; confirm required assets are packaged. Do not push or deploy; the user handles the GitHub/Render workflow and will review the game link. Record deployment and playthrough checks as pending until the user reports them.
+3. Web/release readiness: run full GUT, headless smoke, and Web export; confirm required assets are packaged. The user pushed the reviewed code to GitHub and authorized Render deployment; because auto-deploy did not start, the current commit was deployed through Render. Record browser playthrough and listening checks as pending until the user reports them.
 
-**Exit gate:** Both passages and speedrun features work together in the local Web export; automated integration and packaging checks pass; final acceptance/QA docs contain evidence and limitations. Deployment and interactive playthrough remain user-owned follow-up checks.
+**Exit gate:** Both passages and speedrun features work together in the local Web export; automated integration and packaging checks pass; final acceptance/QA docs contain evidence and limitations. The deployment is live; interactive playthrough and listening review remain user-owned follow-up checks.
 
 ### Handoff/session rule for the expansion
 

@@ -33,6 +33,7 @@ var elapsed_time: float = 0.0
 var personal_best: float = -1.0
 var has_unlocked_dash: bool = false
 var exit_completion_pending: bool = false
+var course_generation: int = 0
 
 
 func _ready() -> void:
@@ -162,6 +163,8 @@ func _build_passage_two() -> void:
 
 
 func _clear_course() -> void:
+	course_generation += 1
+	exit_completion_pending = false
 	for child: Node in course_root.get_children():
 		child.queue_free()
 
@@ -196,7 +199,7 @@ func _add_goal(goal_position: Vector2) -> void:
 	shape.size = Vector2(36.0, 90.0)
 	collision.shape = shape
 	goal.add_child(collision)
-	goal.body_entered.connect(_on_exit_body_entered)
+	goal.body_entered.connect(_on_exit_body_entered.bind(course_generation))
 	course_root.add_child(goal)
 
 
@@ -222,14 +225,16 @@ func unlock_dash(body: Node2D) -> void:
 	queue_redraw()
 
 
-func _on_exit_body_entered(body: Node2D) -> void:
-	if body != player or exit_completion_pending:
+func _on_exit_body_entered(body: Node2D, generation: int) -> void:
+	if body != player or generation != course_generation or exit_completion_pending:
 		return
 	exit_completion_pending = true
-	call_deferred("_complete_level_from_exit")
+	call_deferred("_complete_level_from_exit", generation)
 
 
-func _complete_level_from_exit() -> void:
+func _complete_level_from_exit(generation: int) -> void:
+	if generation != course_generation:
+		return
 	exit_completion_pending = false
 	complete_level()
 

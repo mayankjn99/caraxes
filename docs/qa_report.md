@@ -1,5 +1,21 @@
 # Frozen Passage — QA Report
 
+## Current deployment — 2026-11-01
+
+- GitHub `main` is at `82370a795e4f8d619fc569f696659a9ffc32c032` (`Add speedrun features and local music`); it was the clean baseline when the initial deployment status was recorded. The Passage 2 fix below is a local candidate.
+- Render static site `frozen-passage` (`srv-dbj7lugae00c73deh5cg`) initially remained on the previous commit after the push. A deploy of `82370a7` was then queued through Render and reached `live` (`dep-dbjfkou7bikc73fak0ng`) at 2026-11-01 08:38:57 UTC. Render reported both build and deploy succeeded.
+- Public URL: https://frozen-passage.onrender.com. No browser interaction, game playthrough, or audio listening was performed by the agent, per the user's instruction. User review is still needed to confirm the deployed gameplay experience.
+- The pending user review steps are in [`user_review_checklist.md`](user_review_checklist.md).
+
+## Passage 2 completion bug fix — local candidate — 2026-11-01
+
+- User report and screenshot showed the HUD on Passage 2 with the final “Run complete!” overlay while the player was still at the Passage 2 spawn; the player could not continue.
+- Regression TDD: added `test_stale_passage_one_exit_cannot_finish_passage_two`. Before the implementation change, it failed because a delayed signal from Passage 1's old exit completed the new run and displayed the completion HUD.
+- Fix: each rebuilt course advances a generation counter. Exit signal callbacks capture that generation and are ignored if their course has since been replaced, preventing stale exit events from finishing Passage 2 (or a restarted run).
+- Focused regression: 1/1 test, 3 assertions passed. Phase 8 route tests, including a real physics-triggered Passage 1 exit: 7/7 tests, 34 assertions. Full GUT: 35/35 tests, 204 assertions passed.
+- Editor import, headless main-scene smoke, and `GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh` all exited 0. Existing Godot macOS certificate, MCP registry/port, and editor-settings write warnings remain.
+- No interactive game testing was performed, per the user's instruction. The fix and updated Web export are local and uncommitted; Render still serves commit `82370a7` until the user pushes this change and it is deployed.
+
 ## Phase 10 automated results — 2026-11-01
 
 - Asset TDD/provenance: the first OpenGameArt candidate “Wintery loop” by Emma_MA was rejected when its file could not be retrieved and hashed. The second candidate, “Through the Snow” by Cleyton Kauffman, was downloaded from [its OpenGameArt source page](https://opengameart.org/content/snow-theme). The page marks it CC0 and describes a seamless 24-second winter loop with optional attribution. The included readme also confirms creator and CC0/public-domain terms. Shipped OGG hash and source archive hash are in `docs/asset_manifest.md`.
@@ -155,9 +171,9 @@ At the Phase 10 boundary, SR-08 and SR-09 automated criteria passed and that pha
 | Headless main-scene smoke | `GODOT_MCP_RUNTIME=0 godot --headless --path . --quit-after 2` | Passed — exit code 0; existing host certificate and user log write errors printed. |
 | Web export | `GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh` | Passed — exit code 0; non-empty `index.html`, `index.js`, `index.wasm`, `index.pck`, and audio worklet generated. Godot reported existing certificate, MCP registry/token/port, and editor-settings write warnings. |
 | Export packaging inspection | `strings build/web/index.pck | rg 'through_the_snow|AudioManager|moving_platform'` and file-size inspection | Passed — PCK contains the local `through_the_snow.ogg` resource/import reference, AudioManager, and moving-platform script; required Web output files are non-empty. |
-| Interactive product review/listening | User waiver dated 2026-11-01 | Not performed. No browser was opened, no in-game playthrough or listening review is claimed. User traversal at 960×540 and 640×360 and review of deployed behavior remain pending. No push or deployment was performed. |
+| Interactive product review/listening | User waiver dated 2026-11-01 | Not performed. No browser was opened, no in-game playthrough or listening review is claimed. User traversal at 960×540 and 640×360 and review of deployed behavior remain pending. |
 
-SR-10 automated integration and local Web packaging evidence pass. SR-10's user traversal component remains pending; do not infer that this build has been deployed or browser-played. Earlier P6 deployment evidence applies to the older pushed build only.
+SR-10 automated integration and local Web packaging evidence pass. SR-10's user traversal component remains pending. The Phase 11 build was deployed after this QA record was first written; deployment details are recorded above. The deployed build has not been browser-played by the agent.
 
 ## QA scorecard
 
@@ -170,12 +186,12 @@ Current self-assessment after Phase 11, out of each category's listed weight:
 | Code quality | 20 | 18 | Player, Level, moving-platform motion, and signal-driven HUD have focused responsibilities and automated coverage. |
 | Visuals and audio | 10 | 8 | Coherent code-drawn winter palette and a locally packaged CC0 winter music loop; subjective listening was waived. |
 | UI | 10 | 8 | Existing HUD labels have readable text size and measured high contrast; user confirmed the route and HUD work at both supported browser sizes. |
-| Deployment | 10 | 8 | Current local Web export and packaged assets pass; earlier Render Linux build/published assets are documented. Current export is not deployed and browser startup/traversal remain unverified. |
+| Deployment | 10 | 8 | Phase 11 commit `82370a7` is live on Render and the deploy/build succeeded. A Passage 2 stale-exit fix passes the local Web build but has not been pushed/deployed; browser playthrough remains user-performed. |
 | **Total** | **100** | **90** | Not a substitute for the mandatory gameplay/deployment gates. |
 
-Phase 11 automated integration, asset provenance, and Web packaging checks pass. Subjective listening and current browser playthrough remain for user review. P6-03 is still partially verified because the latest export has not been deployed or reviewed. No changes were pushed or deployed.
+Phase 11 automated integration, asset provenance, and Web packaging checks pass. The Phase 11 commit is deployed on Render. Subjective listening and current browser playthrough remain for user review. P6-03 is partially verified until browser startup, supported viewport sizes, and a complete traversal are confirmed by the user.
 
-Phase 11 acceptance tests and the full current workspace GUT suite pass. SR-10's automation/export checks pass; its user traversal at supported sizes remains pending. P6-03 remains partially verified until the user confirms browser startup, supported viewport sizes, and a complete traversal on the deployed URL. The Phase 11 export has not been pushed or deployed.
+Phase 11 acceptance tests and the full current workspace GUT suite pass. SR-10's automation/export checks pass; its user traversal at supported sizes remains pending. P6-03 remains partially verified until the user confirms browser startup, supported viewport sizes, and a complete traversal on the deployed URL.
 
 ## Open issues and environment limitations
 
