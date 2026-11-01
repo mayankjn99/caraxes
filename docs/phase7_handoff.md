@@ -10,6 +10,8 @@ Implement the speedrun clock and local run record foundation. Read `docs/game_de
 - Render built commit `22f10ba` successfully; its page and required Web export assets returned HTTP 200. The user reports the deployed game works, but did not specify exact viewport sizes or traversal details.
 - Existing behavior: move/jump, four-platform first passage, fall reset, exit completion, high-contrast HUD, 16:9 scaling.
 - Existing GUT baseline: 11/11 tests, 28/28 assertions. Godot 4.7.2 stable, GUT 9.7.1, Godot MCP Toolkit 1.1.2.
+- Phase 7 implementation is present in the working tree: timer starts on movement, continues across falls, resets on explicit restart, and freezes at completion; local personal best persists and the HUD includes run/best time.
+- Verification: focused tests 4/4 and 21 assertions; full GUT suite 14/14 and 45 assertions; Web export produced all expected files. Godot runtime MCP tools were unavailable in the latest session, so interactive HUD/timer inspection remains open.
 - The local branch includes documentation commits that have not yet been pushed. Preserve this plan/handoff and the user's local work; the user handles pushes.
 
 ## Phase 7 scope
@@ -20,9 +22,9 @@ Only implement Phase 7 in `docs/implementationPlan.md` and the `SR-01` through `
 2. Fall preserves elapsed time; explicit run restart resets it.
 3. Locally stored personal-best time, with no server or leaderboard.
 
-Proposed semantics are first movement input starts the clock, completion freezes it, falls keep elapsed time, and explicit restart resets the run. Confirm these assumptions from the user if they differ; do not guess at materially different run rules.
+Confirmed semantics are first movement input starts the clock, completion freezes it, falls keep elapsed time, and explicit restart resets the run. The user also selected dash unlock at a clearly marked course point for Phase 9.
 
-Do not implement moving platforms, Passage 2, dash, or music in Phase 7. Dash unlock is still an open choice for Phase 9; the parent session asked the user to choose among a marked course point (recommended), fixed elapsed time, or dash from the start. Phase 7 and 8 can proceed without that answer.
+Do not implement moving platforms, Passage 2, dash, or music in Phase 7. Phase 8 proceeds with Passage 2 and moving platforms; Phase 9 uses the marked course point for dash unlock.
 
 ## Required workflow and verification
 
@@ -39,4 +41,4 @@ GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh
 
 ## Exit gate
 
-SR-01 through SR-03 are backed by focused tests and a passing full regression suite; timer, fall, restart, and personal-best states have been inspected in-game; the Web export succeeds; QA/acceptance docs reflect evidence and remaining user browser checks.
+Automated evidence and Web export pass. User waived manual product testing and requested code generation phases continue with automated tests. Proceed to Phase 8; the user will review the game link and provide feedback.

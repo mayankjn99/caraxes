@@ -1,6 +1,41 @@
 # Frozen Passage — QA Report
 
-## Current milestone
+## Phase 10 automated results — 2026-11-01
+
+- Asset TDD/provenance: the first OpenGameArt candidate “Wintery loop” by Emma_MA was rejected when its file could not be retrieved and hashed. The second candidate, “Through the Snow” by Cleyton Kauffman, was downloaded from [its OpenGameArt source page](https://opengameart.org/content/snow-theme). The page marks it CC0 and describes a seamless 24-second winter loop with optional attribution. The included readme also confirms creator and CC0/public-domain terms. Shipped OGG hash and source archive hash are in `docs/asset_manifest.md`.
+- Packaged-track test TDD: new acceptance assertions initially failed because no local stream was assigned and the HUD reported “No music”. The local OGG is now a preloaded `AudioStreamOggVorbis`; AudioManager assigns it to the player, and the HUD enables controls. The green assertions verify resource type/assignment, control state, and `AudioStreamPlayer.playing` when a run starts.
+- Audio lifecycle/settings: AudioManager starts on first movement, keeps music through falls, stops on explicit restart and final completion, restarts after a stream ends, and saves mute/volume preferences. HUD controls are keyboard-accessible and sized for 640×360.
+- Focused Phase 10 audio GUT: 4/4 tests and 34 assertions passed. This includes test-only silent fixtures for lifecycle/restart behavior; one test additionally verifies the actual bundled OGG resource is assigned and playback is requested. No subjective listening is claimed.
+- Full GUT regression: 32/32 tests and 171 assertions passed.
+- Main-scene headless smoke launch: `GODOT_MCP_RUNTIME=0 godot --headless --path . --quit-after 2` exited 0.
+- Web export: `GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh` exited 0. Required HTML, JS, WASM, and PCK files are non-empty; PCK strings confirm the `res://assets/audio/through_the_snow.ogg` source and imported Ogg resource are included.
+- `git diff --check` passed before the final documentation update. Godot emitted the known macOS certificate, `user://` log-write, and editor/MCP registry/settings warnings.
+- The user waived interactive browser/in-game testing. No browser or live game testing was performed and no listening claim is made. No push or deployment was performed; the user handles GitHub pushes.
+
+## Phase 9 automated results — 2026-11-01
+
+- Red/green GUT: initial unlock test failed because Player had no dash action/unlock state or course marker; it passed after adding locked input handling, the Passage 1 marker, one-time unlock signal, and HUD cue (1/1 test, 8 assertions).
+- Red/green GUT: the dash-profile test failed because deterministic dash timing/status methods were missing; it passed with facing-direction movement at 900 px/s, a 0.18-second burst, and a 0.65-second cooldown (2/2 focused tests, 19 assertions at that step).
+- Red/green GUT: final completion left an active dash moving at 900 px/s; final completion now clears velocity and disables player input (3/3 focused tests, 25 assertions at that step).
+- Red/green GUT: fall reset cleared cooldown and explicit restart left a stale “Dash ready” HUD cue. Falls now preserve cooldown; explicit restart relocks dash, and HUD state follows the run (4/4 focused tests, 30 assertions at that step).
+- Red/green GUT: a real dash through Passage 1's exit rebuilt collision nodes during physics flushing and could immediately finish the run. Exit completion is now deferred until the physics query completes; the route test passes without physics-server errors. The air-gap traversal, wall-collision, Shift binding, marker contact/one-time signal, and HUD recharge tests also pass.
+- Final focused Phase 9 GUT: 8/8 tests, 50 assertions. Focused HUD accessibility: 1/1 test, 20 assertions; dash status retains 14.64:1 text contrast and 16 px effective size at 640×360.
+- Editor import: `GODOT_MCP_RUNTIME=0 godot --headless --editor --path . --import --quit` exited 0.
+- Phase 7–9 GUT regression suite (explicit list): 28/28 tests, 137 assertions.
+- Full current workspace GUT suite at the Phase 10 checkpoint: 31/31 tests, 165 assertions.
+- Main-scene smoke launch: exit code 0.
+- `GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh`: exit code 0; the Web export produced non-empty `index.html` (5,301 bytes), `index.js` (279,815 bytes), `index.wasm` (39,514,754 bytes), and `index.pck` (1,602,608 bytes).
+- `git diff --check`: passed.
+- Interactive browser/in-game testing was waived by the user (2026-11-01). No browser or live game testing was performed. No push or deployment was performed; the user handles GitHub pushes.
+
+## Phase 7 automated results — 2026-11-01
+
+- Focused run-clock GUT tests: 3/3 passed, 17 assertions. Covers first movement start, freeze at completion, fall continuity, explicit restart, personal-best comparison, and persistence in a fresh game instance. The test required approved access to Godot's `user://` data directory.
+- Full GUT suite: 14/14 passed, 45 assertions (same user-data access).
+- Web export: completed with non-empty `build/web/index.html`, `index.js`, `index.wasm`, and `index.pck`.
+- Interactive timer/completion HUD inspection waived by user (2026-11-01); user will open the link and provide feedback.
+
+## Phase 6 deployment history
 
 Phase 6 — release and deployment. GitHub `main` includes commit `22f10ba`, which fixes the Linux export-template URL. The first Render build failed on the old TuxFamily URL; the fix passed a red/green URL regression check, the local GUT suite (11/11 tests, 28/28 assertions), smoke launch, and Web export. Render's second deployment built the Linux Web export and is live. HTTPS HEAD checks returned 200 for the root, HTML, JS, WASM, and PCK assets; WASM uses `application/wasm`. The user reports that the live game works, without specifying the tested sizes or full traversal; those details remain unverified. No browser was opened or controlled in this session. Prior phase history and Phase 4 presentation/asset notes follow.
 
@@ -90,28 +125,63 @@ Phase 4 meets its presentation and asset-provenance gate with local code-drawn v
 | Render deployment guidance | Current [Static Sites](https://render.com/docs/static-sites) and [Blueprint YAML Reference](https://render.com/docs/blueprint-spec) opened and read | Supports the configured static site, build command, and publish path. Static site deployed from the pushed public Git URL; manual deploy was required after the push. |
 | Deployed browser traversal | User opens the live URL at 960×540 and 640×360 and completes the route | Partially verified — the user reported that the deployed game works. Tested dimensions and a complete traversal were not specified, so the exact P6-03 criteria remain unverified. See `docs/deployment.md`. |
 
+## Phase 8 checks
+
+| Check | Command or evidence | Result |
+|---|---|---|
+| Phase 7 gate before edits | Full GUT suite from `docs/phase8_handoff.md` | Passed before Phase 8 changes — 15/15 tests and 49/49 assertions. |
+| Moving-platform motion TDD | `test_moving_platform_travels_between_fixed_endpoints_and_repeats` in `test_phase8.gd` | Red — the reusable motion script was missing and endpoint/timing assertions failed. Green — `MovingPlatform` now has deterministic constant-speed travel, fixed endpoints, and a repeat cycle. |
+| Player/platform physics TDD | `test_player_rides_moving_platform_and_jumps_off` in `test_phase8.gd` | Landing, carry, and jump-off checks passed. The added takeoff-momentum assertion then failed at zero horizontal velocity; a short configurable carry was added and the focused suite passed. Passage 2 fall recovery verifies its own spawn and preserved run time. |
+| Passage progression TDD | Passage transition and final-completion tests in `test_phase8.gd` | Red — Passage 1 completion finished the run immediately and no active passage state existed. Green — its exit rebuilds the course as Passage 2, keeps elapsed time, and the second exit records final results. |
+| Focused Phase 8 GUT | `GODOT_MCP_RUNTIME=0 godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir= -gtest=res://test/unit/test_phase8.gd -gexit` | Passed — 5/5 tests and 27/27 assertions. |
+| Passage HUD accessibility | `GODOT_MCP_RUNTIME=0 godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir= -gtest=res://test/unit/test_hud_accessibility.gd -gexit` | Passed — 1/1 test and 15/15 assertions, including passage label contrast and 16 px effective size at 640×360. |
+| Finish-result panel TDD | `test_hud_displays_run_time_and_personal_best_on_completion` in `test_run_clock.gd` | Red — measured result text plus padding was 712 px against 490 px. Green — widened the centered completion panel to 780 px; focused timer suite passed 4/4 tests and 22/22 assertions. |
+| Full GUT regression | `GODOT_MCP_RUNTIME=0 godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://test/unit -gexit` | Passed — 20/20 tests and 82/82 assertions. |
+| Editor import | `GODOT_MCP_RUNTIME=0 godot --headless --editor --path . --import --quit` | Exit code 0. Godot emitted existing macOS certificate and MCP registry/token/port/editor-settings write warnings. |
+| Main-scene smoke run | `GODOT_MCP_RUNTIME=0 godot --headless --path . --quit-after 2` | Exit code 0. Existing host certificate and `user://` log-write errors remain. |
+| Web export | `GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh` | Exit code 0. `build/web/index.html`, `index.js`, `index.wasm`, and `index.pck` were generated and non-empty. Godot printed the existing certificate and editor/MCP write warnings. |
+| Interactive product review | User waiver dated 2026-11-01 | Not performed by the agent. User will review the game link; no browser or in-game test is claimed. |
+
+At the Phase 10 boundary, SR-08 and SR-09 automated criteria passed and that phase's Web export included the local CC0 music asset. Phase 11 checks and current export evidence follow below.
+
+## Phase 11 checks
+
+| Check | Command or evidence | Result |
+|---|---|---|
+| Integrated full-run/restart regression | `test_full_run_and_restart_keep_speedrun_systems_in_sync` in `test_run_clock.gd` | Passed — verifies Passage 1 marker and HUD, clock/music start, fall preserving dash/music, Passage 2 transition and movers with continuous timer, final result and personal best, completion audio stop, then restart to Passage 1 with cleared clock/results, locked dash, restored marker, stopped audio, and fresh-run start. Initial fixture attempted an unwritable `user://` path and GUT failed on the resulting logged error; moved the isolated fixture to `/tmp` and the focused suite passed 5/5 tests, 48 assertions. No product-code fix was required. |
+| Editor import | `GODOT_MCP_RUNTIME=0 godot --headless --editor --path . --import --quit` | Passed — exit code 0. Existing host certificate and user-level Godot MCP/editor-settings write warnings were printed. |
+| Focused timer/integration suite | `GODOT_MCP_RUNTIME=0 godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir= -gtest=res://test/unit/test_run_clock.gd -gexit` | Passed — 5/5 tests, 48/48 assertions. |
+| Full GUT regression | `GODOT_MCP_RUNTIME=0 godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://test/unit -gexit` | Passed — 33/33 tests and 197/197 assertions. Existing macOS certificate and `user://` log write errors remain; process exited 0. |
+| Headless main-scene smoke | `GODOT_MCP_RUNTIME=0 godot --headless --path . --quit-after 2` | Passed — exit code 0; existing host certificate and user log write errors printed. |
+| Web export | `GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh` | Passed — exit code 0; non-empty `index.html`, `index.js`, `index.wasm`, `index.pck`, and audio worklet generated. Godot reported existing certificate, MCP registry/token/port, and editor-settings write warnings. |
+| Export packaging inspection | `strings build/web/index.pck | rg 'through_the_snow|AudioManager|moving_platform'` and file-size inspection | Passed — PCK contains the local `through_the_snow.ogg` resource/import reference, AudioManager, and moving-platform script; required Web output files are non-empty. |
+| Interactive product review/listening | User waiver dated 2026-11-01 | Not performed. No browser was opened, no in-game playthrough or listening review is claimed. User traversal at 960×540 and 640×360 and review of deployed behavior remain pending. No push or deployment was performed. |
+
+SR-10 automated integration and local Web packaging evidence pass. SR-10's user traversal component remains pending; do not infer that this build has been deployed or browser-played. Earlier P6 deployment evidence applies to the older pushed build only.
+
 ## QA scorecard
 
-Current self-assessment after Phase 6 deployment preparation, out of each category's listed weight:
+Current self-assessment after Phase 11, out of each category's listed weight:
 
 | Category | Weight | Score | Notes |
 |---|---:|---:|---|
-| Gameplay | 30 | 27 | Confirmed move, jump, collision, reset, and exit loop works. |
-| Level design | 20 | 16 | Four-platform route now sits in a layered, readable winter landscape. |
-| Code quality | 20 | 17 | Player, Level, and signal-driven HUD have separate responsibilities and focused tests. |
-| Visuals and audio | 10 | 7 | Coherent code-drawn winter palette and player/goal illustrations; no audio or third-party art. |
+| Gameplay | 30 | 30 | Both passages, moving platforms, dash unlock/progression, collision, recharge, falls, timer continuity, full-run results, and restart integration pass GUT. |
+| Level design | 20 | 18 | Passage 2 adds horizontal and vertical movers and a dash-reachable gap to the winter route; user visual review remains pending. |
+| Code quality | 20 | 18 | Player, Level, moving-platform motion, and signal-driven HUD have focused responsibilities and automated coverage. |
+| Visuals and audio | 10 | 8 | Coherent code-drawn winter palette and a locally packaged CC0 winter music loop; subjective listening was waived. |
 | UI | 10 | 8 | Existing HUD labels have readable text size and measured high contrast; user confirmed the route and HUD work at both supported browser sizes. |
-| Deployment | 10 | 8 | Local and clean-clone exports, a successful Render Linux build, published assets, and earlier user-confirmed browser sizes pass; deployed browser startup and traversal remain unverified. |
-| **Total** | **100** | **83** | Not a substitute for the mandatory gameplay/deployment gates. |
+| Deployment | 10 | 8 | Current local Web export and packaged assets pass; earlier Render Linux build/published assets are documented. Current export is not deployed and browser startup/traversal remain unverified. |
+| **Total** | **100** | **90** | Not a substitute for the mandatory gameplay/deployment gates. |
 
-Mandatory gameplay checks pass. Deployment remains incomplete only for P6-03 until the user verifies browser startup, the supported viewport sizes, and a complete traversal on the deployed URL.
+Phase 11 automated integration, asset provenance, and Web packaging checks pass. Subjective listening and current browser playthrough remain for user review. P6-03 is still partially verified because the latest export has not been deployed or reviewed. No changes were pushed or deployed.
+
+Phase 11 acceptance tests and the full current workspace GUT suite pass. SR-10's automation/export checks pass; its user traversal at supported sizes remains pending. P6-03 remains partially verified until the user confirms browser startup, supported viewport sizes, and a complete traversal on the deployed URL. The Phase 11 export has not been pushed or deployed.
 
 ## Open issues and environment limitations
 
-- Godot CLI emits host-level macOS certificate and `user://` log write errors. Editor/export runs also report MCP registry token/lock and settings write warnings because those paths are outside the writable workspace. The tested game, GUT, Web export, and browser playthrough still exit/pass as recorded above.
-- Current visuals are original code-drawn illustrations rather than imported curated artwork. No audio was selected. Future external assets still require the documented per-asset preview and provenance checks.
+- Godot CLI emits host-level macOS certificate and `user://` log write errors. Editor/export runs also report MCP registry token/lock and settings write warnings because those paths are outside the writable workspace. The GUT, smoke-launch, and Web export commands still exit/pass as recorded above.
+- Current visuals are original code-drawn illustrations rather than imported curated artwork. The music asset is locally packaged and documented. Future external assets still require the documented per-asset preview and provenance checks.
 - Phase 4 Web export was refreshed, but in-session browser verification of that art presentation was blocked by localhost binding. Phase 5 browser-size usability was later confirmed by the user; previous Phase 2 traversal evidence remains recorded above.
-- The user confirmed the refreshed export at 640×360 and 960×540 in Chrome. No browser screenshots are included; the Godot MCP captures are the only visual artifacts in this report.
-- The export is verified in headless Chrome with SwiftShader; interactive browser testing and additional browser coverage remain later usability work.
-- The remote `mayankjn99/caraxes` still contains only the original README and LICENSE until the user pushes local `main`; local history preserves both.
-- No Frozen Passage Render service exists in **My Workspace**. Render build, deployed file serving, deployed browser startup, and full playthrough remain pending. The Linux download path in the build script is not verified yet.
+- The user previously confirmed an earlier export at 640×360 and 960×540 in Chrome. The current two-passage/music export has not received interactive review; the user waived agent testing and will review the game link.
+- Historical Phase 2 Web traversal evidence used headless Chrome with SwiftShader. It does not verify this Phase 8 route.
+- No Phase 8–10 changes were pushed or deployed. The user handles GitHub pushes; the latest Phase 10 export is available locally at `build/web`.

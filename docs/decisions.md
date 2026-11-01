@@ -41,19 +41,21 @@ The hosted MCP endpoint `https://api.spritefetch.dev/mcp` is registered as `spri
 
 ## Speedrun expansion
 
-**Status:** Requested; phased plan recorded; implementation not started.
+**Status:** Phase 11 integrated local Web release checks completed (2026-11-01); interactive/browser and listening review waived by user, deployment remains user-owned.
 
 ### Decision
 
 - Expand the one-passage traversal game into a single-player speedrun with a run clock, a second passage featuring moving platforms, a later dash ability, and locally packaged music.
 - Keep all gameplay and audio offline. Do not add online leaderboards, accounts, multiplayer, or runtime asset/audio fetches.
 - Use human-composed, appropriately licensed music; AI-generated music remains out of scope.
-- Follow the established TDD cycle for each subfeature: failing behavior test, smallest implementation, focused and regression tests, in-game verification, and recorded results.
+- Follow the established TDD cycle for each subfeature: failing behavior test, smallest implementation, focused and regression tests, in-game verification when available, and recorded results. The user waived agent interactive testing for the current web builds.
 - Proposed run semantics: clock begins on first movement input, a fall returns the player to spawn but the clock continues, explicit restart resets the clock, and completion freezes it. Keep best time locally on the device.
+- Phase 9 dash behavior: one-time pickup on Passage 1 unlocks Shift; dash travels horizontally in facing direction at 900 px/s for 0.18 seconds, ignores gravity during the burst, keeps solid collision, and recharges for 0.65 seconds. Falls/transitions preserve remaining cooldown; explicit restart relocks dash.
+- The first Phase 10 candidate `Wintery loop` by Emma_MA was not adopted because the source file could not be retrieved and verified. Cleyton Kauffman's `Through the Snow` from OpenGameArt was adopted after its included readme and source listing confirmed CC0/public-domain terms; the local OGG checksum is recorded in the asset manifest. No runtime audio sourcing or AI-generated music is used.
 
-### Open choice
+### Settled choice
 
-- The dash unlock event is unresolved. Options are a marked course point (recommended), a fixed elapsed time, or dash from the start. Phase 9 acceptance criteria and implementation must follow the user's answer.
+- Dash unlocks when the player touches the amber “DASH” marker on Passage 1's second platform. The HUD reports locked, active, recharging, and ready states.
 
 ### Rationale
 

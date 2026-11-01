@@ -5,7 +5,12 @@ const MAIN_SCENE: PackedScene = preload("res://scenes/main.tscn")
 
 func test_existing_hud_labels_use_readable_high_contrast_styles() -> void:
 	var game: Node = add_child_autofree(MAIN_SCENE.instantiate())
-	var labels: Array[Label] = [game.get_node("HUD/Instructions"), game.get_node("HUD/Completion")]
+	var labels: Array[Label] = [
+		game.get_node("HUD/Instructions"),
+		game.get_node("HUD/Completion"),
+		game.get_node("HUD/Passage"),
+		game.get_node("HUD/DashStatus"),
+	]
 
 	for label: Label in labels:
 		var style: StyleBox = label.get_theme_stylebox("normal")

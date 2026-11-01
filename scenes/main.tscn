@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/level.gd" id="1_level"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="2_player"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="3_hud"]
+[ext_resource type="Script" path="res://scripts/audio_manager.gd" id="4_audio"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(24, 38)
@@ -44,24 +45,81 @@ shape = SubResource("RectangleShape2D_player")
 [node name="HUD" type="CanvasLayer" parent="."]
 script = ExtResource("3_hud")
 
+[node name="AudioManager" type="Node" parent="."]
+script = ExtResource("4_audio")
+
 [node name="Instructions" type="Label" parent="HUD"]
 offset_left = 20.0
 offset_top = 16.0
-offset_right = 620.0
+offset_right = 740.0
 offset_bottom = 70.0
-text = "Move: A/D or arrows     Jump: Space, W or Up"
+text = "Move: A/D or arrows     Jump: Space, W or Up     Restart: R"
 theme_override_colors/font_color = Color(0.95, 0.98, 1, 1)
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_instructions")
 
 [node name="Completion" type="Label" parent="HUD"]
 visible = false
-offset_left = 310.0
-offset_top = 210.0
-offset_right = 650.0
-offset_bottom = 270.0
+offset_left = 90.0
+offset_top = 190.0
+offset_right = 870.0
+offset_bottom = 310.0
 text = "Passage complete!"
 theme_override_colors/font_color = Color(0.95, 0.98, 1, 1)
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_completion")
 horizontal_alignment = 1
+
+[node name="Timer" type="Label" parent="HUD"]
+offset_left = 760.0
+offset_top = 16.0
+offset_right = 940.0
+offset_bottom = 70.0
+text = "Time: 00:00.00"
+theme_override_colors/font_color = Color(0.95, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_instructions")
+horizontal_alignment = 1
+
+[node name="Passage" type="Label" parent="HUD"]
+offset_left = 20.0
+offset_top = 78.0
+offset_right = 390.0
+offset_bottom = 126.0
+text = "Passage 1 — First ascent"
+theme_override_colors/font_color = Color(0.95, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_instructions")
+
+[node name="DashStatus" type="Label" parent="HUD"]
+offset_left = 430.0
+offset_top = 78.0
+offset_right = 730.0
+offset_bottom = 126.0
+text = "Dash locked — find the marker"
+theme_override_colors/font_color = Color(0.95, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_instructions")
+
+[node name="MusicToggle" type="Button" parent="HUD"]
+offset_left = 750.0
+offset_top = 78.0
+offset_right = 940.0
+offset_bottom = 126.0
+text = "Music: On"
+focus_mode = 2
+tooltip_text = "Toggle the locally packaged winter music."
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_instructions")
+
+[node name="MusicVolume" type="HSlider" parent="HUD"]
+offset_left = 750.0
+offset_top = 130.0
+offset_right = 940.0
+offset_bottom = 162.0
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 0.35
+focus_mode = 2
+tooltip_text = "Music volume"

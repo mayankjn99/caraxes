@@ -80,7 +80,7 @@ Prepare the GitHub repository and Render static-site configuration for the chose
 
 **Exit gate:** Deployment is reproducible from the documented steps; mandatory gameplay and deployment checks pass; failures and remaining limitations are recorded.
 
-## Speedrun expansion phases (requested; not yet implemented)
+## Speedrun expansion phases
 
 The user requested a speedrun-focused expansion after confirming the deployed game works: more than one passage, moving platforms, dash becoming available after an initial period, and music. This scope supersedes Phase 3's earlier conclusion that the single traversal loop needed no further gameplay systems. Retain the TDD loop below for every subfeature. Do not implement online features or use AI-generated music.
 
@@ -93,37 +93,43 @@ Add the timer and run feedback first, before changing the level physics.
 1. Run clock: add a focused test proving the clock is inactive before the run starts, advances deterministically, freezes on completion, and resets for a new run; implement the smallest clock component and verify it in the HUD.
 2. Fall and restart semantics: test that falling returns the player to spawn while preserving elapsed time, and that explicit restart resets the run. Keep this as the proposed default unless the user changes it.
 3. Finish and personal best: test the displayed finish time and best-time comparison, then verify persistence locally only (`user://`, no server or leaderboard).
-4. In-game verification: record a short run, fall once, finish, restart, and complete another run; check displayed times and preserved/reset behavior.
+4. Runtime verification is waived by the user (2026-11-01); automated acceptance tests and Web export checks remain required.
 
-**Exit gate:** P7 acceptance criteria pass, the clock and best time are visible and understandable, regression tests pass, and a Web build still runs.
+**Exit gate:** P7 automated acceptance criteria and regression tests pass, and a Web build succeeds. The user will open the game link and provide feedback; agent interactive testing is waived.
 
 ### Phase 8 — Moving platforms and Passage 2
+
+**Status:** Complete (2026-11-01) — both passages are implemented with deterministic moving platforms, platform carry/jump-off behavior, timer-preserving transitions, and Passage 2 fall recovery. GUT passed 20/20 tests and 82/82 assertions; the Web export produced all required files. The user waived interactive product testing and will review the game link.
 
 Keep Passage 1 as the introductory route and add a second passage with readable, deterministic moving-platform timing.
 
 **Subfeatures and red/green gates**
 
-1. Moving-platform motion: test fixed endpoints, travel duration, and repeat behavior before adding art or layout.
-2. Player/platform physics: test standing and being carried by a platform, jumping off while it moves, and fall/reset behavior.
-3. Passage 2 flow: test reaching Passage 1's exit transitions into the new passage, and finishing Passage 2 ends the run. Avoid repeating or losing the run timer during the transition.
-4. In-game verification: play the route repeatedly to ensure platform cycles are predictable and jumps are achievable.
+1. **Passed:** Moving-platform motion test covered fixed endpoints, travel duration, and repeat behavior before adding course art/layout.
+2. **Passed:** Physics tests covered landing, carrying, jumping with platform momentum, and Passage 2 fall recovery with preserved time.
+3. **Passed:** Passage flow tests covered transition without resetting the run clock and final completion/personal-best recording.
+4. Runtime playtesting is waived by the user (2026-11-01); use automated physics/route tests and Web export checks.
 
-**Exit gate:** Both passages remain playable; moving-platform behavior is automated-tested and playtested; no progression softlocks occur.
+**Exit gate:** Automated tests cover both passages, moving-platform behavior, and progression without softlocks; Web export succeeds. User will review and provide feedback.
 
 ### Phase 9 — Dash progression and platforming
+
+**Status:** Complete (2026-11-01) — Shift unlocks at a marked Passage 1 pickup; dash is horizontal in facing direction at 900 px/s for 0.18 seconds, with gravity suppressed and collision preserved. The 0.65-second cooldown is shown in the HUD, survives falls and passage transitions, and resets when a new run relocks dash. GUT verifies the air dash across Passage 2's gap, wall collision, exit progression, fall/restart behavior, and final completion. The Phase 7–9 regression and full current GUT suite passed; smoke launch and Web export passed. Interactive playtesting was waived by the user.
 
 Add dash only after the moving-platform course exists, so its value and edge cases are tested against the actual route.
 
 **Subfeatures and red/green gates**
 
-1. Dash unlock: test locked input has no effect and the selected unlock event enables it exactly once. **Pending user choice:** marked course point (recommended), fixed elapsed time, or available from the start.
-2. Dash motion: test direction, duration, collision behavior, cooldown/recharge, and interaction with ground/air state; implement one behavior at a time.
-3. Course integration: test dash across representative moving-platform gaps and confirm it cannot bypass intended completion/fall/reset logic.
-4. In-game verification: perform the approach without dash, demonstrate the unlock, then use dash through the intended route and record any exploits.
+1. **Passed:** Locked Shift input leaves velocity unchanged; touching the marked Passage 1 pickup unlocks dash once and updates the HUD. **User selected (2026-11-01):** unlock at a clearly marked course point.
+2. **Passed:** Dash moves in facing direction at 900 px/s for 0.18 seconds, suppresses gravity during its burst, respects solid collision, and recharges after 0.65 seconds. HUD reports active/recharging/ready state.
+3. **Passed:** Air dash crosses Passage 2's moving-platform gap; falls preserve unlock and cooldown; explicit restart relocks; Passage 1 exit transitions to Passage 2 and cannot skip the final passage; final completion stops movement.
+4. Interactive verification waived by the user (2026-11-01); GUT physics/route tests, smoke launch, and Web export were used for the automated gate. The user will review the game link.
 
-**Exit gate:** Unlock, movement, collision, and recharge criteria pass in GUT and in-game playtests; the existing move/jump/reset/completion suite remains green.
+**Exit gate:** Automated unlock, movement, collision, recharge, course progression, and full regression criteria pass; Web export succeeds. Interactive playtesting is waived; the user will review the game link.
 
 ### Phase 10 — Licensed music
+
+**Status:** Implemented with interactive review waived (2026-11-01). The first Emma_MA candidate was rejected when its file could not be retrieved. Cleyton Kauffman's “Through the Snow” was downloaded from its OpenGameArt page; the included readme and source listing confirm CC0/public-domain terms and creator, and the shipped OGG's SHA-256 is recorded in `docs/asset_manifest.md`. AudioManager starts the local track with the run, preserves it through fall recovery, stops on restart/completion, loops at end, and stores mute/volume settings. HUD controls are enabled and keyboard accessible. Focused Phase 10 GUT, full suite, headless launch, and Web export pass. The user waived interactive testing; no listening claim is made.
 
 Select human-composed music under a license that permits the intended distribution. Verify the actual audio file's creator, source, license, attribution, and checksum before adding it.
 
@@ -132,11 +138,13 @@ Select human-composed music under a license that permits the intended distributi
 1. Asset provenance: document candidate preview, creator, source, license, attribution, and checksum; reject the asset if any required provenance is missing.
 2. Playback lifecycle: test music starts at run start, loops or ends as specified, and stops/changes cleanly on completion/restart.
 3. Music control: test a user-accessible mute/volume setting persists as intended. Keep audio local and offline.
-4. In-game verification: listen through a complete run and confirm the mix does not obscure gameplay feedback.
+4. Interactive listening review: waived by the user; automated resource-assignment/playback-state and export-packaging checks are used instead. Do not claim subjective audio review.
 
-**Exit gate:** Every shipped audio file is documented in the asset manifest; Web export plays the local track without runtime network access; controls work.
+**Exit gate:** Every shipped audio file is documented in the asset manifest; automated tests confirm the local stream assignment and run lifecycle; the Web PCK contains the local audio resource; controls work. Interactive listening review is waived by the user.
 
 ### Phase 11 — Integrated speedrun release
+
+**Status:** Automated local release gate complete (2026-11-01). A cross-system GUT regression covers Passage 1 start and music, fall persistence, Passage 2 transition/movers/HUD, final result and personal best, completion audio stop, then a full restart and fresh run. Full GUT passed 33/33 tests and 197/197 assertions; editor import, headless smoke, and Web export passed. PCK inspection found the local OGG. Agent browser/gameplay and listening review were waived. No push or deployment occurred. SR-10 automated evidence is recorded; browser traversal at supported viewports and deployed behavior remain pending user review.
 
 Integrate the clock, Passage 1, Passage 2, dash progression, and music. Tune timing and feedback without adding unrequested services.
 
@@ -144,13 +152,13 @@ Integrate the clock, Passage 1, Passage 2, dash progression, and music. Tune tim
 
 1. Full-run regression: test transitions, timer continuity, fall recovery, final completion, and personal-best updates end to end.
 2. Usability/polish: test control instructions, unlock cue, moving-platform readability, finish results, and restart at supported aspect ratios.
-3. Web/deploy verification: run full GUT, headless smoke, Web export, push through the user's GitHub workflow, trigger Render manually for the public Git URL when needed, verify required assets and runtime logs, then have the user perform the browser playthrough.
+3. Web/release readiness: run full GUT, headless smoke, and Web export; confirm required assets are packaged. Do not push or deploy; the user handles the GitHub/Render workflow and will review the game link. Record deployment and playthrough checks as pending until the user reports them.
 
-**Exit gate:** Both passages and speedrun features work together in the deployed Web build; automated and in-game checks pass; final acceptance/QA docs contain evidence and limitations.
+**Exit gate:** Both passages and speedrun features work together in the local Web export; automated integration and packaging checks pass; final acceptance/QA docs contain evidence and limitations. Deployment and interactive playthrough remain user-owned follow-up checks.
 
 ### Handoff/session rule for the expansion
 
-Create a fresh Codex session for Phase 7 after this plan and handoff are reviewable. At each later phase boundary, complete the phase gate and write the next concise handoff before creating another fresh session. Keep the unresolved dash unlock choice visible; Phase 7 and Phase 8 can proceed independently, but Phase 9 implementation must wait for that choice.
+Create a fresh Codex session for Phase 7 after this plan and handoff are reviewable. At each later phase boundary, complete the phase gate and write the next concise handoff before creating another fresh session. The dash unlock choice is settled: Phase 9 uses a clearly marked course point.
 
 ## TDD loop for every subfeature
 

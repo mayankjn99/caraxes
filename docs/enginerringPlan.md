@@ -37,9 +37,9 @@ Use signals for communication between independent components.
 - No runtime music-generation APIs.
 - Use human-composed, appropriately licensed music.
 - Prefer CC0 tracks or original compositions.
-- Use separate ambient and music tracks for each map.
-- Use simple crossfades between maps.
+- Use a local music track for the current single-course speedrun. Add separate ambient/music tracks or crossfades only if the design later adds maps that need them.
 - Keep audio playback logic inside AudioManager.
+- An audio lifecycle/control implementation does not satisfy the music requirement without a locally packaged track whose file-level provenance and checksum have been verified.
 
 ## 5. Testing and reward function
 
@@ -66,13 +66,13 @@ For every milestone:
 1. Read the game design and architecture documents.
 2. Implement only the current milestone.
 3. Run static checks and automated tests.
-4. Launch the game and verify functionality.
+4. Launch the game headlessly and verify functionality through automated checks. The user waived agent-performed interactive browser/game testing on 2026-11-01 and will review the game link; do not perform interactive verification or claim listening.
 5. Update acceptance criteria.
 6. Update QA scorecard.
 7. Document failures and unresolved issues.
 8. Only then proceed to the next milestone.
 
-Never mark an untested feature as complete.
+Never mark a feature complete without requirement-matched automated evidence. Distinguish automated state/package checks from interactive behavior the user waived.
 
 ## 7. Documentation
 

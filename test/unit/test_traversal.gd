@@ -52,13 +52,16 @@ func test_fall_resets_player_to_start() -> void:
 
 func test_exit_changes_game_to_completed_state() -> void:
 	var game: Node = add_child_autofree(MAIN_SCENE.instantiate())
-	game.get_node("Level").complete_level()
+	var level: Node = game.get_node("Level")
+	level.complete_level()
+	level.complete_level()
 	assert_true(game.get_node("HUD/Completion").visible, "Completion should be clearly visible.")
 
 
 func test_touching_exit_completes_level() -> void:
 	var game: Node = add_child_autofree(MAIN_SCENE.instantiate())
 	var player: CharacterBody2D = game.get_node("Level/Player")
+	game.get_node("Level").complete_level()
 	player.global_position = Vector2(900.0, 405.0)
 	await wait_physics_frames(2)
 	assert_true(game.get_node("Level").completed, "Entering the exit should complete the level.")
@@ -68,6 +71,7 @@ func test_touching_exit_completes_level() -> void:
 func test_fall_reset_clears_completion_feedback() -> void:
 	var game: Node = add_child_autofree(MAIN_SCENE.instantiate())
 	var level: Node = game.get_node("Level")
+	level.complete_level()
 	level.complete_level()
 	level.reset_player()
 	assert_false(game.get_node("HUD/Completion").visible, "Restarting should clear completion feedback.")
