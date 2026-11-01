@@ -10,9 +10,9 @@
 ## Passage 2 completion bug fix — local candidate — 2026-11-01
 
 - User report and screenshot showed the HUD on Passage 2 with the final “Run complete!” overlay while the player was still at the Passage 2 spawn; the player could not continue.
-- Regression TDD: added `test_stale_passage_one_exit_cannot_finish_passage_two`. Before the implementation change, it failed because a delayed signal from Passage 1's old exit completed the new run and displayed the completion HUD.
-- Fix: each rebuilt course advances a generation counter. Exit signal callbacks capture that generation and are ignored if their course has since been replaced, preventing stale exit events from finishing Passage 2 (or a restarted run).
-- Focused regression: 1/1 test, 3 assertions passed. Phase 8 route tests, including a real physics-triggered Passage 1 exit: 7/7 tests, 34 assertions. Full GUT: 35/35 tests, 204 assertions passed.
+- Regression TDD: `test_stale_passage_one_exit_cannot_finish_passage_two` failed before the fix because a queued signal from Passage 1's old exit completed the run after a transition. A second regression, `test_passage_two_exit_does_not_complete_from_spawn_on_stale_overlap_signal`, failed when the current Passage 2 exit emitted a delayed event while the player was still at spawn.
+- Fix: each rebuilt course advances a generation counter. Exit callbacks capture that generation and the specific exit. The deferred handler ignores callbacks from replaced courses and verifies that the player still overlaps the same exit before completing.
+- Both focused regressions pass (2 tests, 7 assertions). Phase 8 route tests, including a real physics-triggered Passage 1 exit, pass 8/8 tests and 38 assertions. Full GUT: 36/36 tests, 208 assertions passed.
 - Editor import, headless main-scene smoke, and `GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh` all exited 0. Existing Godot macOS certificate, MCP registry/port, and editor-settings write warnings remain.
 - No interactive game testing was performed, per the user's instruction. The fix and updated Web export are local and uncommitted; Render still serves commit `82370a7` until the user pushes this change and it is deployed.
 

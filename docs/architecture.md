@@ -13,7 +13,7 @@ Phase 11 integrated release checks are complete for the local Web build. AudioMa
 ## Implemented scene/component responsibilities
 
 - `Main` (`scenes/main.tscn`): owns the Level and HUD instances.
-- `Level` (`scripts/level.gd`): builds the active passage, detects falls, transitions from Passage 1 to Passage 2, places the one-time dash unlock marker, completes the full run, owns run clock/best-time state, and emits lifecycle/passage signals. Exit-triggered course rebuilds are deferred until the physics query completes; exit callbacks carry a course-generation token so queued events from a replaced course cannot complete the new one.
+- `Level` (`scripts/level.gd`): builds the active passage, detects falls, transitions from Passage 1 to Passage 2, places the one-time dash unlock marker, completes the full run, owns run clock/best-time state, and emits lifecycle/passage signals. Exit-triggered course rebuilds are deferred until the physics query completes; exit callbacks carry a course-generation token, and the deferred handler confirms the player still overlaps that exit before completing the run.
 - `MovingPlatform` (`scripts/moving_platform.gd`): moves an `AnimatableBody2D` between configured endpoints at a fixed speed and travel duration, then repeats.
 - `Player` (`scripts/player.gd`): owns left/right input, grounded jump, gravity, collision movement, spawn reset, a short horizontal platform-momentum carry on takeoff, and the unlocked dash burst/cooldown.
 - `HUD` (`scripts/hud.gd`): listens for level signals and displays the active passage, run clock, dash unlock/cooldown state, and final results.

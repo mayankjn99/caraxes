@@ -10,6 +10,6 @@
 
 ## Passage 2 stale-exit fix — local candidate — 2026-11-01
 
-- Fixed a delayed Passage 1 exit callback incorrectly completing the run after Passage 2 had loaded. Exit events now carry the course generation and stale events are ignored.
-- Added red/green stale-callback and real Passage 1 exit regressions. Focused GUT passed 1/1 test and 3 assertions; Phase 8 route tests passed 7/7 with 34 assertions; full GUT passed 35/35 tests and 204 assertions. Editor import, headless smoke, and Web export passed.
+- Fixed stale exit callbacks incorrectly completing Passage 2 at its spawn. Exit events now carry their course generation and source Area2D; the deferred handler confirms the player still overlaps that same exit before completing the run.
+- Added red/green stale-callback, false Passage 2 exit, and real Passage 1 exit regressions. Focused GUT passed 2 tests and 7 assertions; Phase 8 route tests passed 8/8 with 38 assertions; full GUT passed 36/36 tests and 208 assertions. Editor import, headless smoke, and Web export passed.
 - The user reported the failure with a screenshot. The agent did not interactively test the game. This local fix is not yet pushed or deployed.

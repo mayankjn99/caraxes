@@ -94,6 +94,27 @@ func test_entering_passage_one_exit_leaves_passage_two_playable() -> void:
 		"Passage 2 should remain playable without the final results overlay.")
 
 
+func test_passage_two_exit_does_not_complete_from_spawn_on_stale_overlap_signal() -> void:
+	var game: Node = add_child_autofree(load("res://scenes/main.tscn").instantiate())
+	var level: Node = game.get_node("Level")
+	var player: CharacterBody2D = game.get_node("Level/Player")
+	level.set("personal_best", 0.0)
+	level.call("complete_level")
+	await get_tree().process_frame
+	var course: Node2D = level.get("course_root") as Node2D
+	assert_gt(course.get_child_count(), 0, "Passage 2 should have course nodes after transition.")
+	var passage_two_exit: Area2D = course.get_child(course.get_child_count() - 1) as Area2D
+	assert_not_null(passage_two_exit, "Passage 2's final course node should be its exit Area2D.")
+	if passage_two_exit == null:
+		return
+	passage_two_exit.body_entered.emit(player)
+	await get_tree().process_frame
+
+	assert_false(level.get("completed"), "A delayed exit signal must not finish a run while the player is at spawn.")
+	assert_false(game.get_node("HUD/Completion").visible,
+		"A stale exit overlap must not lock Passage 2 behind the results overlay.")
+
+
 func test_passage_two_uses_moving_platforms_and_finishes_the_run() -> void:
 	var game: Node = add_child_autofree(load("res://scenes/main.tscn").instantiate())
 	var level: Node = game.get_node("Level")
