@@ -38,3 +38,23 @@ SpriteFetch provides asset search and download tools with license, provenance, s
 ### Setup note
 
 The hosted MCP endpoint `https://api.spritefetch.dev/mcp` is registered as `spritefetch` in the user-level Codex configuration. A new Codex session or MCP reload may be needed before its tools are available in a conversation. No SpriteFetch assets have been downloaded or added to the game project.
+
+## Speedrun expansion
+
+**Status:** Requested; phased plan recorded; implementation not started.
+
+### Decision
+
+- Expand the one-passage traversal game into a single-player speedrun with a run clock, a second passage featuring moving platforms, a later dash ability, and locally packaged music.
+- Keep all gameplay and audio offline. Do not add online leaderboards, accounts, multiplayer, or runtime asset/audio fetches.
+- Use human-composed, appropriately licensed music; AI-generated music remains out of scope.
+- Follow the established TDD cycle for each subfeature: failing behavior test, smallest implementation, focused and regression tests, in-game verification, and recorded results.
+- Proposed run semantics: clock begins on first movement input, a fall returns the player to spawn but the clock continues, explicit restart resets the clock, and completion freezes it. Keep best time locally on the device.
+
+### Open choice
+
+- The dash unlock event is unresolved. Options are a marked course point (recommended), a fixed elapsed time, or dash from the start. Phase 9 acceptance criteria and implementation must follow the user's answer.
+
+### Rationale
+
+Separate phases let the timer be validated before physics changes, moving platforms be verified before dash tuning, and music provenance/playback be tested independently. This reduces the chance that multiple new systems mask one another's failures.

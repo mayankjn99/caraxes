@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-Phase 6 — release and deployment. GitHub `main` now includes commit `22f10ba`, which fixes the Linux export-template URL. The first Render build failed on the old TuxFamily URL; the fix passed a red/green URL regression check, the local GUT suite (11/11 tests, 28/28 assertions), smoke launch, and Web export. Render's second deployment built the Linux Web export and is live. HTTPS HEAD checks returned 200 for the root, HTML, JS, WASM, and PCK assets; WASM uses `application/wasm`. Browser playthrough and viewport verification remain for the user. No browser was opened or controlled in this session. Prior phase history and Phase 4 presentation/asset notes follow.
+Phase 6 — release and deployment. GitHub `main` includes commit `22f10ba`, which fixes the Linux export-template URL. The first Render build failed on the old TuxFamily URL; the fix passed a red/green URL regression check, the local GUT suite (11/11 tests, 28/28 assertions), smoke launch, and Web export. Render's second deployment built the Linux Web export and is live. HTTPS HEAD checks returned 200 for the root, HTML, JS, WASM, and PCK assets; WASM uses `application/wasm`. The user reports that the live game works, without specifying the tested sizes or full traversal; those details remain unverified. No browser was opened or controlled in this session. Prior phase history and Phase 4 presentation/asset notes follow.
 
 ## TDD record
 
@@ -88,7 +88,7 @@ Phase 4 meets its presentation and asset-provenance gate with local code-drawn v
 | Render deployment after fix | Render deploy status and build logs | Deploy `dep-dbj7qj49v7es739bjaag` built commit `22f10ba` and reached `live`; logs end with `Uploading build...` and `Your site is live`. This verifies the corrected Linux download, import, and export steps. |
 | Deployed asset serving | HTTPS HEAD requests to `/`, `/index.html`, `/index.js`, `/index.wasm`, `/index.pck` on `https://frozen-passage.onrender.com` | All five returned HTTP 200. Content types were HTML, JavaScript, `application/wasm`, and binary PCK as expected. No browser was opened; game startup and traversal remain unverified. |
 | Render deployment guidance | Current [Static Sites](https://render.com/docs/static-sites) and [Blueprint YAML Reference](https://render.com/docs/blueprint-spec) opened and read | Supports the configured static site, build command, and publish path. Static site deployed from the pushed public Git URL; manual deploy was required after the push. |
-| Deployed browser traversal | User opens the live URL at 960×540 and 640×360 and completes the route | Pending — the deployment and required assets are live, but the user still needs to verify browser startup, viewport layout, and keyboard traversal. P6-03 remains incomplete. See `docs/deployment.md`. |
+| Deployed browser traversal | User opens the live URL at 960×540 and 640×360 and completes the route | Partially verified — the user reported that the deployed game works. Tested dimensions and a complete traversal were not specified, so the exact P6-03 criteria remain unverified. See `docs/deployment.md`. |
 
 ## QA scorecard
 

@@ -50,4 +50,21 @@
 |---|---|---|---|
 | P6-01 | Render can reproducibly build and publish the Godot Web export as a static site. | Validate `render.yaml`; run `bash scripts/build_web.sh`; confirm required published files in a Render build. | Passed — the corrected Godot 4.7.2 Linux build and Web export completed on Render; deploy `dep-dbj7qj49v7es739bjaag` is live and all four required assets are served. |
 | P6-02 | A clean checkout builds from the selected pushed GitHub branch and Render publishes the expected files. | Build from a clean clone; inspect the Render build and published files. | Passed — pushed commit `22f10ba` built successfully on Render; HTML, JS, WASM, and PCK assets return HTTP 200. |
-| P6-03 | The deployed Web export starts, displays the route/HUD at supported sizes, and supports a complete keyboard traversal. | User verifies the deployed HTTPS URL at 960×540 and 640×360 and completes the route. | Pending — site URL is https://frozen-passage.onrender.com and assets are served, but browser startup, viewport layout, and full keyboard traversal have not yet been verified. Browser operation remains user-performed. |
+| P6-03 | The deployed Web export starts, displays the route/HUD at supported sizes, and supports a complete keyboard traversal. | User verifies the deployed HTTPS URL at 960×540 and 640×360 and completes the route. | Partially verified — the user reports that the live game works at https://frozen-passage.onrender.com. The user did not specify tested viewport sizes or explicitly report a complete keyboard traversal, so the full matrix remains unverified. Browser operation remains user-performed. |
+
+## Speedrun expansion acceptance criteria (planned)
+
+The user requested a speedrun expansion with more passages, moving platforms, a later dash unlock, and music. These criteria are planned, not implemented; each row must follow the documented red/green/playtest/record loop.
+
+| ID | Requirement | Verification | Status |
+|---|---|---|---|
+| SR-01 | A run clock starts at the defined run start, advances while playing, freezes at final completion, and resets for a new attempt. | GUT clock/lifecycle tests plus in-game timer observation. | Planned — proposed start is first movement input; confirm in Phase 7 before implementation. |
+| SR-02 | Falling returns the player to the spawn without erasing elapsed run time; explicit restart resets the run. | GUT fall/restart integration tests and in-game fall/restart playtest. | Planned — proposed behavior; confirm during Phase 7. |
+| SR-03 | Finish results show the run time and a locally stored personal best; no network leaderboard or account is required. | GUT result/best-time tests, persistence test, and in-game completion check. | Planned — local `user://` storage only. |
+| SR-04 | Passage 2 is reachable after the introductory passage and includes moving platforms with predictable, readable motion. | GUT platform-cycle and passage-transition tests; repeatable in-game route playtest. | Planned — Phase 8. |
+| SR-05 | The player can stand on and be carried by moving platforms, jump off, collide correctly, and recover from falls. | GUT physics integration cases plus Godot MCP playtest. | Planned — Phase 8. |
+| SR-06 | Dash input has no effect while locked and enables only after the user-selected unlock event. | GUT locked/unlocked state tests and in-game unlock cue check. | Planned — unlock event needs user selection before Phase 9. |
+| SR-07 | Dash movement has defined direction, duration, collision behavior, and recharge rules and cannot bypass course completion. | Focused GUT movement/collision tests, regression suite, and course playtest. | Planned — Phase 9; exact behavior to be detailed before implementation. |
+| SR-08 | Music is human-composed, appropriately licensed, locally packaged, and plays without runtime network access. | Review asset manifest and checksum; Web export playback verification. | Planned — Phase 10; AI-generated music is not allowed by project decisions. |
+| SR-09 | Music controls and playback lifecycle behave consistently through run, restart, and completion. | Automated audio state/config tests and in-game listening check. | Planned — Phase 10. |
+| SR-10 | Integrated speedrun flow survives full playthroughs in the Web build at supported viewport sizes. | Full GUT suite, Web export/Render checks, and user playthrough of both passages. | Planned — Phase 11. |
