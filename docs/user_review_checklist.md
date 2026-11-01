@@ -2,7 +2,7 @@
 
 Review the deployed build at <https://frozen-passage.onrender.com>. This checklist is for the user's browser review; the agent has not performed interactive gameplay or listening checks.
 
-The Passage 2 completion fix described in `docs/qa_report.md` is currently only a local candidate. Review Passage 2 after the updated commit is pushed and deployed; the current live site may still show the reported stuck state.
+The Passage 2 completion fix described in `docs/qa_report.md` is deployed in commit `8dcd792`. Review the current live build to confirm Passage 2 remains playable after the transition and reaches completion only at its exit.
 
 For each item, mark **Works**, **Issue**, or **Not tried**. Include what happened and the key/input used for any issue.
 

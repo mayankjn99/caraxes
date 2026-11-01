@@ -29,6 +29,7 @@ Integrate the timer, two-passage moving-platform route, dash unlock, local music
 
 ## Phase 11 completion update — 2026-11-01
 
-- The user pushed commit `82370a795e4f8d619fc569f696659a9ffc32c032` to GitHub `main` and authorized Render deployment. Render auto-deploy did not start, so the pushed commit was manually deployed; deploy `dep-dbjfkou7bikc73fak0ng` reached `live` after a successful build.
+- After the initial Phase 11 release, the user reported Passage 2 stuck at spawn beneath the “Run complete!” overlay. Red/green regressions covered a delayed Passage 1 exit callback after transition and a stale Passage 2 exit event while the player remains at spawn. The fix binds exits to a course generation and verifies overlap at deferred completion. Focused Phase 8 tests passed 8/8 (38 assertions); full GUT passed 36/36 (208 assertions); editor import, headless smoke, and Web export passed.
+- The user pushed fix commit `8dcd79279171601201986825c848cb8dd1fee729` to GitHub `main`. Render deploy `dep-dbjh7fgu01pc73ff7png` reached `live` at 2026-11-01 10:27:14 UTC after a successful build.
 - The agent did not open the deployed page or perform interactive gameplay/listening checks, per the user's instruction. The user owns that final browser review.
 - Phase 11 is the final phase in the current implementation plan. No next implementation session is defined until the user requests another feature phase.

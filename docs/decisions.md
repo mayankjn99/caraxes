@@ -41,7 +41,7 @@ The hosted MCP endpoint `https://api.spritefetch.dev/mcp` is registered as `spri
 
 ## Speedrun expansion
 
-**Status:** Phase 11 integration and local Web release checks completed (2026-11-01); commit `82370a795e4f8d619fc569f696659a9ffc32c032` is live on Render. A user-reported Passage 2 stuck-state fix is now covered by red/green tests in the local, unpushed candidate; see `docs/qa_report.md`. Interactive/browser and listening review were waived for the agent and remain for user review.
+**Status:** Phase 11 integration and local Web release checks completed (2026-11-01). The user-reported Passage 2 stuck-state fix is covered by red/green tests and commit `8dcd79279171601201986825c848cb8dd1fee729` is live on Render; see `docs/qa_report.md`. Interactive/browser and listening review were waived for the agent and remain for user review.
 
 ### Decision
 

@@ -2,19 +2,19 @@
 
 ## Current deployment — 2026-11-01
 
-- GitHub `main` is at `82370a795e4f8d619fc569f696659a9ffc32c032` (`Add speedrun features and local music`); it was the clean baseline when the initial deployment status was recorded. The Passage 2 fix below is a local candidate.
-- Render static site `frozen-passage` (`srv-dbj7lugae00c73deh5cg`) initially remained on the previous commit after the push. A deploy of `82370a7` was then queued through Render and reached `live` (`dep-dbjfkou7bikc73fak0ng`) at 2026-11-01 08:38:57 UTC. Render reported both build and deploy succeeded.
+- GitHub `main` is at `8dcd79279171601201986825c848cb8dd1fee729` (`Guard Passage 2 against stale exit overlap`).
+- Render static site `frozen-passage` (`srv-dbj7lugae00c73deh5cg`) is live on commit `8dcd792` (`dep-dbjh7fgu01pc73ff7png`); the build and deploy completed successfully at 2026-11-01 10:27:14 UTC.
 - Public URL: https://frozen-passage.onrender.com. No browser interaction, game playthrough, or audio listening was performed by the agent, per the user's instruction. User review is still needed to confirm the deployed gameplay experience.
 - The pending user review steps are in [`user_review_checklist.md`](user_review_checklist.md).
 
-## Passage 2 completion bug fix — local candidate — 2026-11-01
+## Passage 2 completion bug fix — deployed — 2026-11-01
 
 - User report and screenshot showed the HUD on Passage 2 with the final “Run complete!” overlay while the player was still at the Passage 2 spawn; the player could not continue.
 - Regression TDD: `test_stale_passage_one_exit_cannot_finish_passage_two` failed before the fix because a queued signal from Passage 1's old exit completed the run after a transition. A second regression, `test_passage_two_exit_does_not_complete_from_spawn_on_stale_overlap_signal`, failed when the current Passage 2 exit emitted a delayed event while the player was still at spawn.
 - Fix: each rebuilt course advances a generation counter. Exit callbacks capture that generation and the specific exit. The deferred handler ignores callbacks from replaced courses and verifies that the player still overlaps the same exit before completing.
 - Both focused regressions pass (2 tests, 7 assertions). Phase 8 route tests, including a real physics-triggered Passage 1 exit, pass 8/8 tests and 38 assertions. Full GUT: 36/36 tests, 208 assertions passed.
 - Editor import, headless main-scene smoke, and `GODOT_MCP_RUNTIME=0 bash scripts/build_web.sh` all exited 0. Existing Godot macOS certificate, MCP registry/port, and editor-settings write warnings remain.
-- No interactive game testing was performed, per the user's instruction. The fix and updated Web export are local and uncommitted; Render still serves commit `82370a7` until the user pushes this change and it is deployed.
+- The user pushed the fix, and it is deployed on Render as commit `8dcd792`. No interactive game testing was performed, per the user's instruction; user playthrough remains pending.
 
 ## Phase 10 automated results — 2026-11-01
 
@@ -186,10 +186,10 @@ Current self-assessment after Phase 11, out of each category's listed weight:
 | Code quality | 20 | 18 | Player, Level, moving-platform motion, and signal-driven HUD have focused responsibilities and automated coverage. |
 | Visuals and audio | 10 | 8 | Coherent code-drawn winter palette and a locally packaged CC0 winter music loop; subjective listening was waived. |
 | UI | 10 | 8 | Existing HUD labels have readable text size and measured high contrast; user confirmed the route and HUD work at both supported browser sizes. |
-| Deployment | 10 | 8 | Phase 11 commit `82370a7` is live on Render and the deploy/build succeeded. A Passage 2 stale-exit fix passes the local Web build but has not been pushed/deployed; browser playthrough remains user-performed. |
+| Deployment | 10 | 8 | Fix commit `8dcd792` is live on Render and the deploy/build succeeded. Browser playthrough remains user-performed. |
 | **Total** | **100** | **90** | Not a substitute for the mandatory gameplay/deployment gates. |
 
-Phase 11 automated integration, asset provenance, and Web packaging checks pass. The Phase 11 commit is deployed on Render. Subjective listening and current browser playthrough remain for user review. P6-03 is partially verified until browser startup, supported viewport sizes, and a complete traversal are confirmed by the user.
+Phase 11 automated integration, asset provenance, and Web packaging checks pass. The Passage 2 fix commit is deployed on Render. Subjective listening and current browser playthrough remain for user review. P6-03 is partially verified until browser startup, supported viewport sizes, and a complete traversal are confirmed by the user.
 
 Phase 11 acceptance tests and the full current workspace GUT suite pass. SR-10's automation/export checks pass; its user traversal at supported sizes remains pending. P6-03 remains partially verified until the user confirms browser startup, supported viewport sizes, and a complete traversal on the deployed URL.
 

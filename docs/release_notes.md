@@ -8,8 +8,8 @@
 - Commit `82370a7` was pushed by the user and deployed to Render; the build and deploy succeeded. The user waived agent browser/gameplay and listening review and has not yet reported traversal at 960×540 or 640×360 on this build. Deployment is confirmed, but gameplay behavior in the deployed browser remains for user review.
 - Godot emitted existing host certificate, `user://` log, MCP registry/token/port, and editor-settings write warnings during checks. The relevant commands exited successfully.
 
-## Passage 2 stale-exit fix — local candidate — 2026-11-01
+## Passage 2 stale-exit fix — deployed — 2026-11-01
 
 - Fixed stale exit callbacks incorrectly completing Passage 2 at its spawn. Exit events now carry their course generation and source Area2D; the deferred handler confirms the player still overlaps that same exit before completing the run.
 - Added red/green stale-callback, false Passage 2 exit, and real Passage 1 exit regressions. Focused GUT passed 2 tests and 7 assertions; Phase 8 route tests passed 8/8 with 38 assertions; full GUT passed 36/36 tests and 208 assertions. Editor import, headless smoke, and Web export passed.
-- The user reported the failure with a screenshot. The agent did not interactively test the game. This local fix is not yet pushed or deployed.
+- The user reported the failure with a screenshot. Commit `8dcd792` was pushed to GitHub and deployed to Render. The agent did not interactively test the game; user playthrough remains pending.

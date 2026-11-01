@@ -25,7 +25,7 @@ The winter level presentation is drawn in local GDScript using layered mountain 
 
 - GUT tests cover both passages, deterministic platform cycles, platform carry/jump-off, fall recovery, timer continuity, dash unlock/movement/collision/recharge, course progression, and final completion.
 - Phase 10 lifecycle/configuration and packaged-stream GUT tests pass. The actual OGG resource is included in the Web PCK and the AudioStreamPlayer enters its playing state on run start. Subjective listening was waived by the user; the user will review the game link.
-- Phase 11 integration GUT verifies a complete two-passage state flow and restart across timer, dash, HUD/results, and audio. This is deterministic component integration coverage, not an interactive traversal. Commit `82370a7` is live on Render; browser playthrough and listening review remain user-owned under the user's waiver of agent interactive testing.
+- Phase 11 integration GUT verifies a complete two-passage state flow and restart across timer, dash, HUD/results, and audio. Regression tests also guard against stale exits completing the run at the Passage 2 spawn. This is deterministic component integration coverage, not an interactive traversal. Fix commit `8dcd792` is live on Render; browser playthrough and listening review remain user-owned under the user's waiver of agent interactive testing.
 
 ## Engine and test toolchain
 
